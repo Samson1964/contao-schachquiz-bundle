@@ -2,21 +2,22 @@
 # Änderungen hier werden von Claude in den Fork übertragen.
 #
 # Titel und Beschreibung laufen dort durch eine Rechtschreibprüfung; deshalb
-# „Schach-Quiz“ statt „Schachquiz“ und Umschreibungen statt Komposita.
-# Schlagwörter werden nicht geprüft.
+# „Schach-Quiz“ statt „Schachquiz“, und „Glicko-2“ steht nur bei den
+# Schlagwörtern, die nicht geprüft werden.
 
 de:
     title: Schach-Quiz
     description: >
-        Ein Quiz rund ums Schach mit Fragen, bei denen eine oder mehrere Antworten
-        richtig sind, auf Wunsch mit einer Stellung als Diagramm. Die Wertung folgt
-        Glicko-2: Wer richtig antwortet, bekommt schwerere Fragen. Eine Rangliste
-        zeigt die besten Mitglieder, Fragen lassen sich aus CSV oder JSON importieren.
+        Ein Quiz rund ums Schach mit Fragen, bei denen eine oder mehrere Antworten richtig sind, auf Wunsch mit einer Stellung als Diagramm.
+
+        Jede Antwort verändert eine Wertung nach dem Vorbild der Elo-Zahl: Wer richtig antwortet, steigt und bekommt schwerere Fragen, wer falsch antwortet, leichtere. Keine Frage wird zweimal gestellt. Mitglieder erscheinen in einer Rangliste, Gäste spielen mit einer Wertung nur für ihren Besuch.
+
+        Fragen lassen sich im Backend pflegen oder aus CSV und JSON importieren.
     keywords:
         - Schach
         - Quiz
         - Schachquiz
-        - Glicko
+        - Glicko-2
         - Elo
         - Rangliste
         - Multiple Choice
@@ -25,14 +26,15 @@ de:
 en:
     title: Chess quiz
     description: >
-        A chess quiz with single and multiple choice questions, optionally with a
-        position shown as a diagram. Ratings follow Glicko-2, so correct answers lead
-        to harder questions. A ranking lists the best members, and questions can be
-        imported from CSV or JSON.
+        A chess quiz with single and multiple choice questions, optionally with a position shown as a diagram.
+
+        Every answer changes a rating in the style of the Elo system: correct answers raise it and lead to harder questions, wrong answers to easier ones. No question is asked twice. Members appear in a ranking, guests play with a rating that only lasts for their visit.
+
+        Questions are maintained in the back end or imported from CSV and JSON.
     keywords:
         - chess
         - quiz
-        - Glicko
+        - Glicko-2
         - Elo
         - ranking
         - multiple choice
