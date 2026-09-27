@@ -15,6 +15,7 @@ use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\Template;
 use Doctrine\DBAL\Connection;
+use Schachbulle\ContaoSchachquizBundle\Quiz\Fragenauswahl;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -86,11 +87,13 @@ class SchachquizController extends AbstractFrontendModuleController
      * @return list<array{id: int, titel: string, anzahl: int}> Veröffentlichte
      *                                                          Themen mit mindestens
      *                                                          einer veröffentlichten
-     *                                                          Frage, nach Titel sortiert
+     *                                                          Frage, nach dem gezeigten
+     *                                                          Titel sortiert
      */
     private function themen(array $erlaubt): array
     {
-        $sql = "SELECT t.id, t.title, COUNT(i.id) AS anzahl FROM tl_schachquiz t
+        // Gezeigt wird der Frontend-Titel, sofern das Thema einen hat.
+        $sql = "SELECT t.id, ".Fragenauswahl::THEMENTITEL." AS titel, COUNT(i.id) AS anzahl FROM tl_schachquiz t
             INNER JOIN tl_schachquiz_items i ON i.pid = t.id AND i.published = '1'
             WHERE t.published = '1'";
 
@@ -98,10 +101,10 @@ class SchachquizController extends AbstractFrontendModuleController
             $sql .= ' AND t.id IN ('.implode(',', $erlaubt).')';
         }
 
-        $sql .= ' GROUP BY t.id, t.title ORDER BY t.title';
+        $sql .= ' GROUP BY t.id, t.title, t.titel_frontend ORDER BY titel';
 
         return array_map(
-            static fn (array $zeile): array => ['id' => (int) $zeile['id'], 'titel' => (string) $zeile['title'], 'anzahl' => (int) $zeile['anzahl']],
+            static fn (array $zeile): array => ['id' => (int) $zeile['id'], 'titel' => (string) $zeile['titel'], 'anzahl' => (int) $zeile['anzahl']],
             $this->db->fetchAllAssociative($sql)
         );
     }

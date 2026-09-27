@@ -12,6 +12,8 @@ $GLOBALS['TL_LANG']['tl_schachquiz']['title_legend'] = 'Thema';
 $GLOBALS['TL_LANG']['tl_schachquiz']['publish_legend'] = 'Veröffentlichung';
 
 $GLOBALS['TL_LANG']['tl_schachquiz']['title'] = ['Titel', 'Name des Themas, etwa „Schachregeln" oder „Eröffnungen". Er erscheint im Frontend als Auswahl.'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['titel_frontend'] = ['Titel im Frontend', 'Optional. Wird Besuchern statt des Titels gezeigt; im Backend bleibt der Titel maßgeblich.'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['listeFrontendtitel'] = 'im Frontend: %s';
 $GLOBALS['TL_LANG']['tl_schachquiz']['beschreibung'] = ['Beschreibung', 'Optionale Beschreibung für die Redaktion.'];
 $GLOBALS['TL_LANG']['tl_schachquiz']['published'] = ['Veröffentlicht', 'Nur Fragen veröffentlichter Themen erscheinen im Quiz.'];
 

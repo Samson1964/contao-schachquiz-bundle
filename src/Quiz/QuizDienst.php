@@ -40,6 +40,12 @@ class QuizDienst
     public const THEMA_WIE_ZULETZT = -1;
 
     /**
+     * Sitzungsschlüssel für die Antworten dieser Sitzung (Anzahl und davon
+     * richtige), getrennt vom dauerhaften Stand eines Mitglieds.
+     */
+    public const SITZUNG_STAND = 'schachquiz_sitzungsstand';
+
+    /**
      * Legt den Dienst an.
      *
      * @param Connection         $db         Datenbankverbindung von Contao
@@ -113,7 +119,7 @@ class QuizDienst
                         ? 'Du hast alle Fragen dieser Auswahl schon gehabt. Wähle ein anderes Thema oder schau später wieder vorbei.'
                         : 'Zu dieser Auswahl gibt es noch keine Fragen.',
                     'thema' => $thema,
-                    'spieler' => $teilnehmer->alsAnzeige(),
+                    'spieler' => $this->anzeige($teilnehmer, $sitzung),
                 ];
             }
 
@@ -125,7 +131,7 @@ class QuizDienst
             'status' => 'ok',
             'frage' => $this->frageFuerSkript($zeile),
             'thema' => $thema,
-            'spieler' => $teilnehmer->alsAnzeige(),
+            'spieler' => $this->anzeige($teilnehmer, $sitzung),
         ];
     }
 
@@ -194,6 +200,9 @@ class QuizDienst
         $teilnehmer->verbuche($neuSpieler, $richtig);
         $this->speicher->speichere($teilnehmer, $sitzung);
 
+        $stand = $this->sitzungsstand($sitzung);
+        $sitzung->set(self::SITZUNG_STAND, ['anzahl' => $stand['anzahl'] + 1, 'richtig' => $stand['richtig'] + ($richtig ? 1 : 0)]);
+
         // Gäste stehen seit dem Stellen der Frage in ihrer Sitzungsliste;
         // bei Mitgliedern wird der beim Stellen angelegte Verlaufseintrag
         // jetzt um die Antwort ergänzt.
@@ -222,7 +231,44 @@ class QuizDienst
             'erklaerung' => (string) $zeile['erklaerung'],
             'vorher' => (int) round($vorher->wertung),
             'differenz' => (int) round($neuSpieler->wertung) - (int) round($vorher->wertung),
-            'spieler' => $teilnehmer->alsAnzeige(),
+            'spieler' => $this->anzeige($teilnehmer, $sitzung),
+        ];
+    }
+
+    /**
+     * Stellt die Angaben zum Spieler für das Skript zusammen.
+     *
+     * Zum dauerhaften Stand kommt der Stand dieser Sitzung. Bei Gästen sind
+     * beide gleich; bei Mitgliedern zeigt das Skript ihn nur, wenn er sich
+     * vom Gesamtstand unterscheidet.
+     *
+     * @param Teilnehmer       $teilnehmer Der Teilnehmer
+     * @param SessionInterface $sitzung    Die Sitzung des Besuchers
+     *
+     * @return array<string, mixed> alsAnzeige() plus `sitzungAnzahl` und `sitzungRichtig`
+     */
+    private function anzeige(Teilnehmer $teilnehmer, SessionInterface $sitzung): array
+    {
+        $stand = $this->sitzungsstand($sitzung);
+
+        return $teilnehmer->alsAnzeige() + ['sitzungAnzahl' => $stand['anzahl'], 'sitzungRichtig' => $stand['richtig']];
+    }
+
+    /**
+     * Liest den Stand dieser Sitzung.
+     *
+     * @param SessionInterface $sitzung Die Sitzung des Besuchers
+     *
+     * @return array{anzahl: int, richtig: int} Antworten in dieser Sitzung und
+     *                                          davon richtige, anfangs beide 0
+     */
+    private function sitzungsstand(SessionInterface $sitzung): array
+    {
+        $stand = $sitzung->get(self::SITZUNG_STAND);
+
+        return [
+            'anzahl' => (int) ($stand['anzahl'] ?? 0),
+            'richtig' => (int) ($stand['richtig'] ?? 0),
         ];
     }
 

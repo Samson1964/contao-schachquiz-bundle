@@ -450,13 +450,38 @@
         wertung.textContent = spieler.wertung + (spieler.vorlaeufig ? '?' : '');
         if (spieler.vorlaeufig) { wertung.title = t.vorlaeufig || ''; }
 
+        // „5 von 9 richtig“; bei Mitgliedern zusätzlich der Stand dieser
+        // Sitzung, sofern er vom Gesamtstand abweicht, und ab zwei die Zahl
+        // der richtigen Antworten in Folge.
+        // Vor der ersten Antwort steht nur die Wertung da, nicht „0 von 0".
+        var teile = spieler.anzahl > 0 ? [text(t.vonRichtig || '%d von %d richtig', spieler.richtig, spieler.anzahl)] : [];
+
+        if (!spieler.gast && spieler.sitzungAnzahl > 0 && spieler.sitzungAnzahl !== spieler.anzahl) {
+            teile.push(text(t.inSitzung || 'diese Sitzung %d von %d', spieler.sitzungRichtig, spieler.sitzungAnzahl));
+        }
+
+        if (spieler.serie >= 2) {
+            teile.push(text(t.inFolge || '%d in Folge richtig', spieler.serie));
+        }
+
         var rest = document.createElement('span');
-        rest.textContent = ' · ' + (t.serie || 'Serie') + ' ' + spieler.serie + ' · ' + spieler.anzahl + ' ' + (t.beantwortet || '');
+        rest.textContent = teile.length ? ' · ' + teile.join(' · ') : '';
 
         this.el.stand.replaceChildren(document.createTextNode((t.wertung || 'Wertung') + ' '), wertung, rest);
 
         if (this.el.gast) { this.el.gast.hidden = !spieler.gast; }
     };
+
+    /**
+     * Setzt Zahlen der Reihe nach für „%d“ in einen Text ein.
+     *
+     * @param {string} vorlage Text mit Platzhaltern, etwa „%d von %d richtig“
+     * @returns {string}
+     */
+    function text(vorlage) {
+        var werte = Array.prototype.slice.call(arguments, 1);
+        return vorlage.replace(/%d/g, function () { return String(werte.shift()); });
+    }
 
     /** Startet alle Quizze der Seite. */
     function start() {

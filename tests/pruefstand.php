@@ -103,9 +103,9 @@ $container->get('contao.framework')->initialize();
 
 melde('Frontend-Modul schachquiz angemeldet', isset($GLOBALS['FE_MOD']['schachquiz']['schachquiz']));
 melde('Frontend-Modul schachquiz_rangliste angemeldet', isset($GLOBALS['FE_MOD']['schachquiz']['schachquiz_rangliste']));
-melde('Wertungen als Tabelle im Modul Schachquiz, kein eigenes Modul', in_array('tl_schachquiz_spieler', $GLOBALS['BE_MOD']['schachquiz']['schachquiz']['tables'] ?? [], true) && !isset($GLOBALS['BE_MOD']['schachquiz']['schachquiz_spieler']));
+melde('Modul im Bereich Inhalte, Wertungen als Tabelle darin, kein eigener Bereich', in_array('tl_schachquiz_spieler', $GLOBALS['BE_MOD']['content']['schachquiz']['tables'] ?? [], true) && !isset($GLOBALS['BE_MOD']['schachquiz']));
 melde('Figurensatz liegt im Bundle', 12 <= substr_count((string) @file_get_contents(dirname(__DIR__).'/src/Resources/public/figuren/cburnett.svg'), '<g id="'));
-melde('Backend-Modul mit Import-Rückruf', ($GLOBALS['BE_MOD']['schachquiz']['schachquiz']['import'] ?? null) === [ImportModul::class, 'zeige']);
+melde('Backend-Modul mit Import-Rückruf', ($GLOBALS['BE_MOD']['content']['schachquiz']['import'] ?? null) === [ImportModul::class, 'zeige']);
 melde('Import-Seite als öffentlicher Dienst', $container->has(ImportModul::class));
 melde('Quiz-Schnittstelle als öffentlicher Dienst', $container->has(QuizController::class));
 
@@ -264,6 +264,7 @@ melde('Richtige Antworten werden als richtig gewertet', 39 === $richtigeSerie);
 $leer = $quiz->frage($einstellung, 0, $gast, 0);
 melde('Danach: „alle Fragen gehabt“ statt Wiederholung', 'leer' === $leer['status'] && str_contains($leer['meldung'], 'alle Fragen'), $leer['meldung'] ?? '');
 melde('Gastwertung nach 39 richtigen deutlich gestiegen', $leer['spieler']['wertung'] > 1800 && $leer['spieler']['gast'], (string) $leer['spieler']['wertung']);
+melde('Sitzungsstand: 40 Antworten, davon 39 richtig', 40 === ($leer['spieler']['sitzungAnzahl'] ?? null) && 39 === ($leer['spieler']['sitzungRichtig'] ?? null), json_encode([$leer['spieler']['sitzungAnzahl'] ?? null, $leer['spieler']['sitzungRichtig'] ?? null]));
 melde('Gäste verändern die Wertung der Fragen nicht', 0 === (int) $db->fetchOne('SELECT SUM(anzahl) FROM tl_schachquiz_items WHERE pid = ?', [$thema]));
 
 melde('Ohne Gastfreigabe keine Frage für Gäste', 'fehler' === $quiz->frage(new Quizeinstellung(990002, [$thema], false), 0, sitzung(), 0)['status']);
@@ -353,6 +354,15 @@ $spaet = (int) $db->lastInsertId();
 $gastFrage = $quiz->frage($einstellung, 0, $wechselSitzung, 0)['frage']['id'];
 $nachLogin = $quiz->antwort($einstellung, $spaet, $wechselSitzung, $loesung($gastFrage));
 melde('Als Gast gezogen, als Mitglied beantwortet: Verlauf vorhanden', 'ok' === $nachLogin['status'] && 1 === (int) $db->fetchOne('SELECT COUNT(*) FROM tl_schachquiz_verlauf WHERE member = ? AND item = ?', [$spaet, $gastFrage]));
+
+// --- Titel im Frontend -----------------------------------------------------
+
+$db->update('tl_schachquiz', ['titel_frontend' => 'Prüfstand im Frontend'], ['id' => $thema]);
+$mitTitel = $quiz->frage($einstellung, 0, sitzung(), 0);
+melde('Frage trägt den Frontend-Titel des Themas', 'Prüfstand im Frontend' === ($mitTitel['frage']['thema'] ?? null), $mitTitel['frage']['thema'] ?? '');
+$optionen = (new Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\ModulListener($db))->themenOptionen();
+melde('Modulauswahl nennt den Frontend-Titel in Klammern', str_contains($optionen[$thema] ?? '', ': Prüfstand im Frontend)'), $optionen[$thema] ?? '');
+melde('Backend-Liste nennt den Frontend-Titel', str_contains((new Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\ThemenListener())->beschriftung(['title' => 'A', 'titel_frontend' => 'B']), ': B]'));
 
 // --- Aufräumen -----------------------------------------------------------
 

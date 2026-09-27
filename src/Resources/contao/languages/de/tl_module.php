@@ -22,3 +22,4 @@ $GLOBALS['TL_LANG']['tl_module']['schachquiz_namensformat_optionen'] = [
     'benutzer' => 'Benutzername',
 ];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_unveroeffentlicht'] = '(unveröffentlicht)';
+$GLOBALS['TL_LANG']['tl_module']['schachquiz_frontendtitel'] = '(im Frontend: %s)';

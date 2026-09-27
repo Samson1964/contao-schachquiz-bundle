@@ -1,5 +1,17 @@
 # Schachquiz-Bundle Changelog
 
+## Version 1.2.0 (2026-09-27)
+
+* Add: Feld „Titel im Frontend" am Thema. Besucher sehen ihn statt des Titels; im Backend
+  bleibt der Titel maßgeblich, ein abweichender Frontend-Titel steht in Klammern dahinter.
+* Change: Die Statuszeile zeigt „5 von 9 richtig", bei Mitgliedern zusätzlich den Stand
+  dieser Sitzung und ab zwei die Zahl der richtigen Antworten in Folge. Das missverständliche
+  „Serie" entfällt; in der Rangliste heißt die Spalte jetzt „Längste Folge" mit Erklärung.
+* Change: Das Backend-Modul steht im Bereich „Inhalte"; der eigene Bereich „Schachquiz" entfällt.
+* Fix: Themes, die Knöpfe beim Überfahren oder im Fokus einfärben (etwa dunkelblau), machten
+  Antworten und Themen-Laschen unlesbar. Diese Zustände legen Hintergrund und Schrift jetzt
+  selbst fest.
+
 ## Version 1.1.0 (2026-09-27)
 
 * Change: Das Diagramm zeigt die Figuren als Vektorgrafiken (Satz „Cburnett", CC BY-SA 3.0)

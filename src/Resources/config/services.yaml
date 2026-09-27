@@ -63,6 +63,10 @@ services:
             - { name: contao.callback, table: tl_schachquiz_items, target: fields.schwierigkeit.options, method: stufenOptionen }
             - { name: contao.callback, table: tl_schachquiz_items, target: config.onsubmit, method: setzeAnfangswertung }
 
+    Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\ThemenListener:
+        tags:
+            - { name: contao.callback, table: tl_schachquiz, target: list.label.label, method: beschriftung }
+
     Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\SpielerListener:
         tags:
             - { name: contao.callback, table: tl_schachquiz_spieler, target: list.label.label, method: beschriftung }

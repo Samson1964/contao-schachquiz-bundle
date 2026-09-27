@@ -34,14 +34,17 @@ class ModulListener
      * Modul vorbereiten kann, bevor das Thema freigeschaltet wird; das
      * Frontend zeigt ohnehin nur veröffentlichte.
      *
-     * @return array<int, string> ID => Titel, unveröffentlichte mit Vermerk
+     * @return array<int, string> ID => Titel; ein abweichender Frontend-Titel
+     *                            und „unveröffentlicht" stehen in Klammern dahinter
      */
     public function themenOptionen(): array
     {
         $optionen = [];
 
-        foreach ($this->db->fetchAllAssociative('SELECT id, title, published FROM tl_schachquiz ORDER BY title') as $zeile) {
-            $optionen[(int) $zeile['id']] = $zeile['title'].('1' === (string) $zeile['published'] ? '' : ' '.Sprache::text('tl_module', 'schachquiz_unveroeffentlicht'));
+        foreach ($this->db->fetchAllAssociative('SELECT id, title, titel_frontend, published FROM tl_schachquiz ORDER BY title') as $zeile) {
+            $optionen[(int) $zeile['id']] = $zeile['title']
+                .('' !== (string) $zeile['titel_frontend'] ? ' '.Sprache::text('tl_module', 'schachquiz_frontendtitel', $zeile['titel_frontend']) : '')
+                .('1' === (string) $zeile['published'] ? '' : ' '.Sprache::text('tl_module', 'schachquiz_unveroeffentlicht'));
         }
 
         return $optionen;

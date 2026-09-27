@@ -63,6 +63,7 @@ $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($thi
 
   <p class="schachquiz-rangliste__hinweis">
     <?= $t['vorlaeufigHinweis'] ?? '' ?>
+    <?= $t['besteSerieHinweis'] ?? '' ?>
     <?php if ($this->mindestens > 0): ?><?= sprintf($t['mindestensHinweis'] ?? '', $this->mindestens) ?><?php endif; ?>
   </p>
 <?php endif; ?>

@@ -31,6 +31,12 @@ use Doctrine\DBAL\Connection;
  */
 class Fragenauswahl
 {
+    /**
+     * SQL-Ausdruck für den Thementitel im Frontend: der eigene Frontend-Titel,
+     * sonst der normale Titel. Setzt den Tabellenalias „t" voraus.
+     */
+    public const THEMENTITEL = "COALESCE(NULLIF(t.titel_frontend, ''), t.title)";
+
     /** Anzahl der wertungsnächsten Kandidaten, aus denen zufällig gewählt wird. */
     private const KANDIDATEN = 8;
 
@@ -110,7 +116,7 @@ class Fragenauswahl
     public function lade(int $id): ?array
     {
         $zeile = $this->db->fetchAssociative(
-            "SELECT i.*, t.title AS thema_titel FROM tl_schachquiz_items i
+            "SELECT i.*, ".self::THEMENTITEL." AS thema_titel FROM tl_schachquiz_items i
                 INNER JOIN tl_schachquiz t ON t.id = i.pid
                 WHERE i.id = ? AND i.published = '1' AND t.published = '1'",
             [$id]
@@ -135,7 +141,7 @@ class Fragenauswahl
      */
     private function kandidaten(array $themen, float $wertung, array $ausschluss): array
     {
-        $sql = "SELECT i.*, t.title AS thema_titel FROM tl_schachquiz_items i
+        $sql = "SELECT i.*, ".self::THEMENTITEL." AS thema_titel FROM tl_schachquiz_items i
             INNER JOIN tl_schachquiz t ON t.id = i.pid
             WHERE i.published = '1' AND t.published = '1'";
 

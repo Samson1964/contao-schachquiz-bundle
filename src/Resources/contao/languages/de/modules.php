@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @license LGPL-3.0-or-later
  */
 
-// Backend-Modulgruppe und Module
+// Backend-Modul (im Bereich „Inhalte")
 $GLOBALS['TL_LANG']['MOD']['schachquiz'] = ['Schachquiz', 'Quizthemen, Fragen und Antworten verwalten.'];
 
 // Frontend-Modulgruppe und Module

@@ -16,6 +16,9 @@
     --sq-text: inherit;
     --sq-leise: #6b6b6b;
     --sq-akzent: #2f6f9f;
+    --sq-akzent-dunkel: #245a82;
+    --sq-schrift: #1d2329;
+    --sq-hover: #eaf1f7;
     --sq-richtig: #2e7d32;
     --sq-richtig-grund: #e7f4e8;
     --sq-falsch: #c62828;
@@ -208,8 +211,48 @@
     transition: border-color .15s, background-color .15s, transform .1s;
 }
 
-.schachquiz__antwort:hover:not(:disabled) {
+/*
+ * Zustände Überfahren, Fokus und Gedrückt mit hoher Spezifität: Viele Themes
+ * färben Knöpfe über „button:hover" oder „button:focus" ein, etwa dunkelblau.
+ * Diese Regeln sind spezifischer als eine einfache Klasse, und die dunkle
+ * Schrift der Antwort bliebe auf dunklem Grund stehen. Deshalb legen die
+ * folgenden Regeln Hintergrund, Schrift und Filter ausdrücklich fest.
+ * Die Auswertungsklassen (ist-korrekt usw.) betreffen gesperrte Knöpfe und
+ * werden davon nicht berührt.
+ */
+.schachquiz button.schachquiz__antwort:hover:not(:disabled),
+.schachquiz button.schachquiz__antwort:focus:not(:disabled),
+.schachquiz button.schachquiz__antwort:active:not(:disabled) {
+    background: var(--sq-hover);
+    color: var(--sq-schrift);
     border-color: var(--sq-akzent);
+    filter: none;
+}
+
+.schachquiz button.schachquiz__antwort.ist-gewaehlt:hover:not(:disabled) {
+    background: var(--sq-hover);
+}
+
+.schachquiz button.schachquiz__thema:hover:not([aria-pressed="true"]),
+.schachquiz button.schachquiz__thema:focus:not([aria-pressed="true"]) {
+    background: var(--sq-hover);
+    color: var(--sq-schrift);
+    border-color: var(--sq-akzent);
+    filter: none;
+}
+
+.schachquiz button.schachquiz__thema[aria-pressed="true"]:hover,
+.schachquiz button.schachquiz__thema[aria-pressed="true"]:focus {
+    background: var(--sq-akzent-dunkel);
+    color: #fff;
+    filter: none;
+}
+
+.schachquiz .schachquiz__aktionen button:hover:not(:disabled),
+.schachquiz .schachquiz__aktionen button:focus:not(:disabled) {
+    background: var(--sq-akzent-dunkel);
+    color: #fff;
+    filter: none;
 }
 
 .schachquiz__antwort:active:not(:disabled) {

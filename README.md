@@ -19,11 +19,12 @@ Danach die Datenbank aktualisieren (Contao Manager oder `contao:migrate`).
 
 ## Einrichten
 
-1. **Fragen anlegen:** Backend → Schachquiz. Ein Thema anlegen und darin Fragen,
+1. **Fragen anlegen:** Backend → Inhalte → Schachquiz. Ein Thema kann einen eigenen
+   „Titel im Frontend" haben, der Besuchern statt des Titels gezeigt wird. Ein Thema anlegen und darin Fragen,
    oder über „Fragen importieren" eine CSV- oder JSON-Datei einspielen. Dort
    lassen sich auch die 40 mitgelieferten Beispielfragen mit einem Klick
    übernehmen.
-2. **Modul „Schachquiz"** anlegen (Gruppe Schachquiz) und in eine Seite einbinden.
+2. **Modul „Schachquiz"** anlegen (Frontend-Modulgruppe Schachquiz) und in eine Seite einbinden.
    Einstellungen: welche Themen gelten (ohne Auswahl alle), ob Gäste mitspielen
    dürfen, ob die Figuren-Animationen laufen.
 3. Optional das **Modul „Schachquiz-Rangliste"** anlegen: Anzahl der Plätze,
@@ -74,7 +75,7 @@ leichter oder schwerer sind als gedacht.
 * Wer die Seite neu lädt, bekommt dieselbe offene Frage wieder. Eine unbequeme
   Frage lässt sich also nicht wegklicken. Ein Themenwechsel verwirft die offene
   Frage ohne Wertung; sie bleibt aber verbraucht.
-* Im Backend unter Schachquiz → „Quiz-Wertungen" setzt das Löschen eines Eintrags
+* Im Backend unter Inhalte → Schachquiz → „Quiz-Wertungen" setzt das Löschen eines Eintrags
   ein Mitglied samt Verlauf zurück.
 
 ## Import

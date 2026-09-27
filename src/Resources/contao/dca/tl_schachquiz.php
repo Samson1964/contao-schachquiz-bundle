@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_schachquiz'] = [
             'panelLayout' => 'filter;search,limit',
         ],
         'label' => [
-            'fields' => ['title'],
+            'fields' => ['title', 'titel_frontend'],
             'format' => '%s',
         ],
         'global_operations' => [
@@ -91,7 +91,7 @@ $GLOBALS['TL_DCA']['tl_schachquiz'] = [
     ],
 
     'palettes' => [
-        'default' => '{title_legend},title,beschreibung;{publish_legend},published',
+        'default' => '{title_legend},title,titel_frontend,beschreibung;{publish_legend},published',
     ],
 
     'fields' => [
@@ -106,6 +106,13 @@ $GLOBALS['TL_DCA']['tl_schachquiz'] = [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'titel_frontend' => [
+            'exclude' => true,
+            'search' => true,
+            'inputType' => 'text',
+            'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'beschreibung' => [
