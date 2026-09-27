@@ -1,0 +1,21 @@
+# Schnittstelle zwischen Quiz-Skript und Server.
+#
+# `_scope: frontend` ordnet die Anfrage der Frontend-Firewall zu; nur so ist
+# ein angemeldetes Mitglied hier bekannt.
+#
+# Contaos REQUEST_TOKEN ist hier abgeschaltet: Contao entfernt das Token aus
+# Seiten, die ohne Cookie ausgeliefert werden, und setzt das CSRF-Cookie erst,
+# wenn schon ein anderes Cookie existiert. Die erste Quizanfrage startet aber
+# gerade erst die Sitzung, ab der zweiten schlüge die Prüfung deshalb immer
+# fehl. Den Schutz vor fremden Seiten übernimmt QuizController::istEigeneAnfrage().
+
+schachquiz_aktion:
+    path: /_schachquiz/{modul}/{aktion}
+    defaults:
+        _controller: Schachbulle\ContaoSchachquizBundle\Controller\QuizController
+        _scope: frontend
+        _token_check: false
+    requirements:
+        modul: \d+
+        aktion: frage|antwort
+    methods: [POST]

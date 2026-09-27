@@ -1,0 +1,332 @@
+{
+    "themen": [
+        {
+            "titel": "Schachregeln",
+            "beschreibung": "Grundregeln, Sonderzüge und Remisregeln nach den FIDE-Regeln.",
+            "fragen": [
+                {
+                    "frage": "Wie viele Felder hat ein Schachbrett?",
+                    "schwierigkeit": 1,
+                    "antworten": ["48", "64", "81", "100"],
+                    "richtig": [2],
+                    "erklaerung": "8 Reihen mal 8 Linien ergeben 64 Felder, je 32 helle und dunkle."
+                },
+                {
+                    "frage": "Welche Figur steht in der Grundstellung auf e1?",
+                    "schwierigkeit": 1,
+                    "antworten": ["Die weiße Dame", "Der weiße König", "Der schwarze König", "Ein weißer Läufer"],
+                    "richtig": [2],
+                    "erklaerung": "Der weiße König steht auf e1, die Dame daneben auf d1 – „die Dame steht auf ihrer Farbe“."
+                },
+                {
+                    "frage": "Welche Figur darf über andere Figuren hinwegziehen?",
+                    "schwierigkeit": 1,
+                    "antworten": ["Läufer", "Turm", "Springer", "Dame"],
+                    "richtig": [3],
+                    "erklaerung": "Nur der Springer springt. Bei der Rochade zieht zwar auch der Turm über den König, das ist aber ein Sonderzug zweier Figuren."
+                },
+                {
+                    "frage": "Wie heißt der Sonderzug, bei dem König und Turm gemeinsam ziehen?",
+                    "schwierigkeit": 1,
+                    "antworten": ["En passant", "Rochade", "Umwandlung", "Gambit"],
+                    "richtig": [2]
+                },
+                {
+                    "frage": "Wie wird die lange Rochade notiert?",
+                    "schwierigkeit": 2,
+                    "antworten": ["0-0", "0-0-0", "K-T", "Kc1"],
+                    "richtig": [2],
+                    "erklaerung": "0-0 ist die kurze Rochade (Königsflügel), 0-0-0 die lange (Damenflügel)."
+                },
+                {
+                    "frage": "Was bedeutet „Patt“?",
+                    "schwierigkeit": 2,
+                    "antworten": ["Der König steht im Schach und kann nicht entkommen.", "Der Spieler am Zug hat keinen regelgemäßen Zug, steht aber nicht im Schach.", "Beide Spieler haben nur noch ihren König.", "Dieselbe Stellung kam dreimal vor."],
+                    "richtig": [2],
+                    "erklaerung": "Ein Patt beendet die Partie sofort mit Remis – eine häufige Rettung für die schwächere Seite."
+                },
+                {
+                    "frage": "In welche Figuren darf sich ein Bauer auf der letzten Reihe umwandeln?",
+                    "typ": "multiple",
+                    "schwierigkeit": 3,
+                    "antworten": ["Dame", "Turm", "Läufer", "Springer", "König"],
+                    "richtig": [1, 2, 3, 4],
+                    "erklaerung": "Erlaubt sind Dame, Turm, Läufer und Springer derselben Farbe – auch wenn diese Figur noch auf dem Brett steht. Ein zweiter König ist ausgeschlossen."
+                },
+                {
+                    "frage": "Du berührst absichtlich deinen eigenen Springer. Was gilt nach den FIDE-Regeln?",
+                    "schwierigkeit": 3,
+                    "antworten": ["Nichts, solange du ihn nicht loslässt.", "Du musst mit diesem Springer ziehen, sofern er einen regelgemäßen Zug hat.", "Du musst mit irgendeiner Leichtfigur ziehen.", "Du bekommst eine Zeitstrafe."],
+                    "richtig": [2],
+                    "erklaerung": "„Berührt – geführt“. Wer eine Figur nur zurechtrücken will, kündigt das vorher mit „j’adoube“ an."
+                },
+                {
+                    "frage": "Wann darf ein Bauer „en passant“ schlagen?",
+                    "schwierigkeit": 4,
+                    "antworten": ["Jederzeit, wenn ein gegnerischer Bauer neben ihm steht.", "Nur unmittelbar nachdem ein gegnerischer Bauer mit einem Doppelschritt neben ihn gezogen ist.", "Nur mit einem Bauern auf der sechsten Reihe.", "Nur wenn der eigene König im Schach steht."],
+                    "richtig": [2],
+                    "erklaerung": "Der schlagende Bauer steht auf der 5. (Weiß) bzw. 4. Reihe (Schwarz) und schlägt so, als wäre der Gegner nur ein Feld gezogen. Das Recht verfällt, wenn es nicht sofort genutzt wird."
+                },
+                {
+                    "frage": "Nach wie vielen Zügen ohne Bauernzug und ohne Schlagfall kann ein Spieler Remis beanspruchen?",
+                    "schwierigkeit": 4,
+                    "antworten": ["25", "40", "50", "75"],
+                    "richtig": [3],
+                    "erklaerung": "Nach 50 Zügen beider Seiten kann Remis beansprucht werden. Nach 75 Zügen endet die Partie auch ohne Antrag automatisch remis."
+                },
+                {
+                    "frage": "In welchen Fällen ist die Rochade (vorübergehend oder dauerhaft) nicht erlaubt?",
+                    "typ": "multiple",
+                    "schwierigkeit": 5,
+                    "antworten": ["Der König steht im Schach.", "Der König hat schon einmal gezogen.", "Der beteiligte Turm wird angegriffen.", "Der König müsste über ein angegriffenes Feld ziehen.", "Zwischen König und Turm steht eine Figur."],
+                    "richtig": [1, 2, 4, 5],
+                    "erklaerung": "Ein angegriffener Turm hindert die Rochade nicht – nur der König darf weder im Schach stehen noch ein angegriffenes Feld überqueren oder betreten."
+                },
+                {
+                    "frage": "Welche dieser Situationen führen zum Remis?",
+                    "typ": "multiple",
+                    "schwierigkeit": 5,
+                    "antworten": ["Patt", "Dreimalige Stellungswiederholung (beansprucht)", "König und Läufer gegen König", "König und Turm gegen König"],
+                    "richtig": [1, 2, 3],
+                    "erklaerung": "Mit König und Läufer allein ist kein Matt möglich, die Partie endet sofort remis. König und Turm setzen dagegen stets matt."
+                }
+            ]
+        },
+        {
+            "titel": "Schachgeschichte",
+            "beschreibung": "Weltmeister, berühmte Partien und die Herkunft des Spiels.",
+            "fragen": [
+                {
+                    "frage": "Aus welchem Land stammt das Schachspiel nach heutiger Forschung ursprünglich?",
+                    "schwierigkeit": 3,
+                    "antworten": ["China", "Indien", "Persien", "Ägypten"],
+                    "richtig": [2],
+                    "erklaerung": "Das indische Chaturanga (um das 6. Jahrhundert) gilt als ältester Vorläufer. Über Persien und die arabische Welt kam das Spiel nach Europa."
+                },
+                {
+                    "frage": "Wofür steht die Abkürzung FIDE?",
+                    "schwierigkeit": 2,
+                    "antworten": ["Den Weltschachbund", "Den Deutschen Schachbund", "Eine Eröffnung", "Ein Turniersystem"],
+                    "richtig": [1],
+                    "erklaerung": "Fédération Internationale des Échecs, gegründet 1924 in Paris."
+                },
+                {
+                    "frage": "Aus welchem Land stammt Magnus Carlsen?",
+                    "schwierigkeit": 2,
+                    "antworten": ["Schweden", "Dänemark", "Norwegen", "Island"],
+                    "richtig": [3]
+                },
+                {
+                    "frage": "Wer gewann 1972 in Reykjavík den Weltmeistertitel?",
+                    "schwierigkeit": 3,
+                    "antworten": ["Boris Spasski", "Bobby Fischer", "Anatoli Karpow", "Michail Tal"],
+                    "richtig": [2],
+                    "erklaerung": "Bobby Fischer besiegte Boris Spasski im „Match des Jahrhunderts“ mitten im Kalten Krieg."
+                },
+                {
+                    "frage": "Welchen Weltmeister besiegte der IBM-Rechner Deep Blue 1997 in einem Wettkampf?",
+                    "schwierigkeit": 3,
+                    "antworten": ["Anatoli Karpow", "Garri Kasparow", "Wladimir Kramnik", "Viswanathan Anand"],
+                    "richtig": [2],
+                    "erklaerung": "Deep Blue gewann 1997 mit 3,5:2,5 – der erste Wettkampfsieg eines Computers gegen einen amtierenden Weltmeister."
+                },
+                {
+                    "frage": "Wer war der erste offizielle Schachweltmeister?",
+                    "schwierigkeit": 4,
+                    "antworten": ["Paul Morphy", "Wilhelm Steinitz", "Emanuel Lasker", "Adolf Anderssen"],
+                    "richtig": [2],
+                    "erklaerung": "Steinitz gewann 1886 den ersten offiziellen Weltmeisterschaftskampf gegen Johannes Zukertort."
+                },
+                {
+                    "frage": "Welcher deutsche Spieler war am längsten Schachweltmeister?",
+                    "schwierigkeit": 4,
+                    "antworten": ["Siegbert Tarrasch", "Emanuel Lasker", "Aaron Nimzowitsch", "Robert Hübner"],
+                    "richtig": [2],
+                    "erklaerung": "Emanuel Lasker hielt den Titel 27 Jahre lang, von 1894 bis 1921 – länger als jeder andere."
+                },
+                {
+                    "frage": "Wer wurde im Dezember 2024 als jüngster Spieler der Geschichte Weltmeister?",
+                    "schwierigkeit": 5,
+                    "antworten": ["Ding Liren", "Gukesh Dommaraju", "Alireza Firouzja", "Praggnanandhaa Rameshbabu"],
+                    "richtig": [2],
+                    "erklaerung": "Gukesh besiegte in Singapur Ding Liren und wurde mit 18 Jahren Weltmeister."
+                },
+                {
+                    "frage": "Welche dieser Spieler waren Schachweltmeister?",
+                    "typ": "multiple",
+                    "schwierigkeit": 6,
+                    "antworten": ["Anatoli Karpow", "Viktor Kortschnoi", "Viswanathan Anand", "David Bronstein", "Wladimir Kramnik"],
+                    "richtig": [1, 3, 5],
+                    "erklaerung": "Kortschnoi und Bronstein spielten jeweils um den Titel, verloren aber: Kortschnoi 1978 und 1981 gegen Karpow, Bronstein 1951 remis gegen Botwinnik, der den Titel damit behielt."
+                },
+                {
+                    "frage": "Welche Figur war im mittelalterlichen Schach eine der schwächsten und wurde erst Ende des 15. Jahrhunderts zur stärksten?",
+                    "schwierigkeit": 6,
+                    "antworten": ["Der Turm", "Der Läufer", "Die Dame", "Der Springer"],
+                    "richtig": [3],
+                    "erklaerung": "Der Vorgänger der Dame (Fers oder Wesir) zog nur ein Feld diagonal. Mit der neuen, weitreichenden Dame entstand um 1475 in Spanien das moderne Schach."
+                },
+                {
+                    "frage": "Wer spielte die „Unsterbliche Partie“ von 1851?",
+                    "schwierigkeit": 7,
+                    "antworten": ["Morphy gegen den Herzog von Braunschweig", "Anderssen gegen Kieseritzky", "Steinitz gegen Zukertort", "Anderssen gegen Dufresne"],
+                    "richtig": [2],
+                    "erklaerung": "Adolf Anderssen opferte in London beide Türme, einen Läufer und die Dame. Anderssen gegen Dufresne ist die „Immergrüne Partie“, Morphys Opernpartie spielte er gegen den Herzog und einen Grafen."
+                }
+            ]
+        },
+        {
+            "titel": "Eröffnungen",
+            "beschreibung": "Die gängigen Eröffnungen erkennen.",
+            "fragen": [
+                {
+                    "frage": "Welche Eröffnung zeigt das Diagramm (1.e4 e5 2.Sf3 Sc6 3.Lc4)?",
+                    "schwierigkeit": 2,
+                    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+                    "brett": "weiss",
+                    "antworten": ["Italienische Partie", "Spanische Partie", "Schottische Partie", "Königsgambit"],
+                    "richtig": [1]
+                },
+                {
+                    "frage": "Wie heißt die Eröffnung nach 1.e4 c5?",
+                    "schwierigkeit": 2,
+                    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2",
+                    "brett": "weiss",
+                    "antworten": ["Französische Verteidigung", "Caro-Kann-Verteidigung", "Sizilianische Verteidigung", "Skandinavische Verteidigung"],
+                    "richtig": [3]
+                },
+                {
+                    "frage": "Wie heißt die Eröffnung nach 1.e4 e6?",
+                    "schwierigkeit": 2,
+                    "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+                    "brett": "weiss",
+                    "antworten": ["Französische Verteidigung", "Holländische Verteidigung", "Pirc-Verteidigung", "Aljechin-Verteidigung"],
+                    "richtig": [1]
+                },
+                {
+                    "frage": "Welche Eröffnung zeigt das Diagramm (1.e4 e5 2.Sf3 Sc6 3.Lb5)?",
+                    "schwierigkeit": 3,
+                    "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+                    "brett": "weiss",
+                    "antworten": ["Italienische Partie", "Spanische Partie", "Russische Verteidigung", "Wiener Partie"],
+                    "richtig": [2],
+                    "erklaerung": "Die Spanische Partie heißt nach dem Priester Ruy López de Segura, der sie 1561 beschrieb."
+                },
+                {
+                    "frage": "Wie heißt die Eröffnung nach 1.d4 d5 2.c4?",
+                    "schwierigkeit": 3,
+                    "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq c3 0 2",
+                    "brett": "weiss",
+                    "antworten": ["Königsgambit", "Damengambit", "Englische Eröffnung", "Londoner System"],
+                    "richtig": [2],
+                    "erklaerung": "Nimmt Schwarz auf c4, spricht man vom angenommenen Damengambit; hält er mit 2…e6 oder 2…c6 dagegen, vom abgelehnten."
+                },
+                {
+                    "frage": "Wie heißt die Eröffnung nach 1.e4 c6?",
+                    "schwierigkeit": 3,
+                    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+                    "brett": "weiss",
+                    "antworten": ["Sizilianische Verteidigung", "Caro-Kann-Verteidigung", "Französische Verteidigung", "Moderne Verteidigung"],
+                    "richtig": [2]
+                },
+                {
+                    "frage": "Welches Gambit zeigt das Diagramm (1.e4 e5 2.f4)?",
+                    "schwierigkeit": 3,
+                    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq f3 0 2",
+                    "brett": "weiss",
+                    "antworten": ["Damengambit", "Evans-Gambit", "Königsgambit", "Budapester Gambit"],
+                    "richtig": [3]
+                },
+                {
+                    "frage": "Wie viele Züge dauert das kürzestmögliche Matt (Narrenmatt)?",
+                    "schwierigkeit": 4,
+                    "antworten": ["Zwei", "Drei", "Vier", "Fünf"],
+                    "richtig": [1],
+                    "erklaerung": "1.f3 e5 2.g4 Dh4# – Schwarz setzt schon im zweiten Zug matt."
+                }
+            ]
+        },
+        {
+            "titel": "Taktik",
+            "beschreibung": "Matt- und Gewinnzüge in Diagrammstellungen.",
+            "fragen": [
+                {
+                    "frage": "Weiß am Zug. Welcher Zug setzt matt?",
+                    "schwierigkeit": 2,
+                    "fen": "6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1",
+                    "antworten": ["Te8#", "Te7", "h3", "Kf1"],
+                    "richtig": [1],
+                    "erklaerung": "Das klassische Grundreihenmatt: Die eigenen Bauern versperren dem König die Flucht."
+                },
+                {
+                    "frage": "Weiß am Zug. Welcher Zug setzt sofort matt?",
+                    "schwierigkeit": 2,
+                    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+                    "antworten": ["Dxf7#", "Lxf7+", "Dxe5+", "Sf3"],
+                    "richtig": [1],
+                    "erklaerung": "Das Schäfermatt: f7 wird nur vom König gedeckt, und die Dame auf f7 steht unter dem Schutz des Läufers c4."
+                },
+                {
+                    "frage": "Weiß am Zug. Welche Züge setzen sofort matt?",
+                    "typ": "multiple",
+                    "schwierigkeit": 3,
+                    "fen": "7k/6pp/8/8/8/8/5PPP/3QR1K1 w - - 0 1",
+                    "antworten": ["Te8#", "Dd8#", "Dg4", "h4"],
+                    "richtig": [1, 2],
+                    "erklaerung": "Turm und Dame nutzen jeweils die offene Grundreihe; beide Züge setzen matt."
+                },
+                {
+                    "frage": "Weiß am Zug. Welcher Zug gewinnt die schwarze Dame?",
+                    "schwierigkeit": 4,
+                    "fen": "q3k3/8/8/3N4/8/8/5PPP/6K1 w - - 0 1",
+                    "antworten": ["Sc7+", "Sf6+", "Sb6", "Se7"],
+                    "richtig": [1],
+                    "erklaerung": "Die Springergabel Sc7+ greift König und Dame zugleich an. Nach dem Königszug folgt Sxa8. Sb6 greift zwar die Dame an, gibt aber kein Schach – die Dame entkommt."
+                }
+            ]
+        },
+        {
+            "titel": "Endspiele",
+            "beschreibung": "Grundwissen für das Endspiel.",
+            "fragen": [
+                {
+                    "frage": "Wie viele Bauerneinheiten ist ein Turm nach der klassischen Faustregel wert?",
+                    "schwierigkeit": 1,
+                    "antworten": ["3", "5", "7", "9"],
+                    "richtig": [2],
+                    "erklaerung": "Faustregel: Bauer 1, Springer und Läufer je 3, Turm 5, Dame 9."
+                },
+                {
+                    "frage": "Welche Figur ist nach der klassischen Faustregel etwa so viel wert wie ein Läufer?",
+                    "schwierigkeit": 1,
+                    "antworten": ["Turm", "Springer", "Dame", "Zwei Bauern"],
+                    "richtig": [2]
+                },
+                {
+                    "frage": "Weiß am Zug. Holt der weiße König den schwarzen a-Bauern ein?",
+                    "schwierigkeit": 5,
+                    "fen": "7k/8/8/p7/8/5K2/8/8 w - - 0 1",
+                    "antworten": ["Ja", "Nein"],
+                    "richtig": [1],
+                    "erklaerung": "Die Quadratregel: Das Quadrat des Bauern reicht von a5 bis e1. Mit 1.Ke3 betritt der König das Quadrat und fängt den Bauern: 1…a4 2.Kd3 a3 3.Kc2 a2 4.Kb2."
+                },
+                {
+                    "frage": "Weiß am Zug. Wie endet die Partie bei bestem Spiel?",
+                    "schwierigkeit": 6,
+                    "fen": "4k3/8/4K3/4P3/8/8/8/8 w - - 0 1",
+                    "antworten": ["Weiß gewinnt", "Remis", "Schwarz gewinnt"],
+                    "richtig": [1],
+                    "erklaerung": "Steht der König auf der sechsten Reihe vor seinem Bauern (kein Randbauer), gewinnt Weiß unabhängig vom Zugrecht: 1.Kd6 Kd8 2.e6 Ke8 3.e7 Kf7 4.Kd7."
+                },
+                {
+                    "frage": "Mit welchem Material lässt sich gegen einen alleinstehenden König ein Matt erzwingen?",
+                    "typ": "multiple",
+                    "schwierigkeit": 7,
+                    "antworten": ["König und Dame", "König und Turm", "König und zwei Läufer", "König, Läufer und Springer", "König und zwei Springer"],
+                    "richtig": [1, 2, 3, 4],
+                    "erklaerung": "Mit zwei Springern gibt es zwar Mattbilder, erzwingen lässt sich das Matt aber nicht. Läufer und Springer schaffen es, brauchen allerdings bis zu 33 Züge."
+                }
+            ]
+        }
+    ]
+}

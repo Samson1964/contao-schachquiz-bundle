@@ -1,0 +1,53 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php $t = $GLOBALS['TL_LANG']['schachquiz'] ?? []; ?>
+
+<?php if (empty($this->zeilen)): ?>
+  <p class="schachquiz-rangliste__leer"><?= $t['keineEintraege'] ?? '' ?></p>
+<?php else: ?>
+  <table class="schachquiz-rangliste">
+    <thead>
+      <tr>
+        <th scope="col" class="schachquiz-rangliste__platz"><?= $t['platz'] ?? 'Platz' ?></th>
+        <th scope="col" class="schachquiz-rangliste__name"><?= $t['name'] ?? 'Name' ?></th>
+        <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['wertung'] ?? 'Wertung' ?></th>
+        <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['beantwortet'] ?? '' ?></th>
+        <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['quote'] ?? 'Quote' ?></th>
+        <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['besteSerie'] ?? '' ?></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->zeilen as $zeile): ?>
+        <tr<?= $zeile['eigene'] ? ' class="schachquiz-rangliste__eigene" aria-current="true"' : '' ?>>
+          <td class="schachquiz-rangliste__platz"><?= $zeile['platz'] ?></td>
+          <td class="schachquiz-rangliste__name"><?= htmlspecialchars($zeile['name']) ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $zeile['wertung'] ?><?= $zeile['vorlaeufig'] ? '?' : '' ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $zeile['anzahl'] ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $zeile['quote'] ?> %</td>
+          <td class="schachquiz-rangliste__zahl"><?= $zeile['serie'] ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+    <?php if ($this->eigene): ?>
+      <tfoot>
+        <tr class="schachquiz-rangliste__eigene" aria-current="true">
+          <td class="schachquiz-rangliste__platz"><?= $this->eigene['platz'] ?></td>
+          <td class="schachquiz-rangliste__name"><?= htmlspecialchars($this->eigene['name']) ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['wertung'] ?><?= $this->eigene['vorlaeufig'] ? '?' : '' ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['anzahl'] ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['quote'] ?> %</td>
+          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['serie'] ?></td>
+        </tr>
+      </tfoot>
+    <?php endif; ?>
+  </table>
+
+  <p class="schachquiz-rangliste__hinweis">
+    <?= $t['vorlaeufigHinweis'] ?? '' ?>
+    <?php if ($this->mindestens > 0): ?><?= sprintf($t['mindestensHinweis'] ?? '', $this->mindestens) ?><?php endif; ?>
+  </p>
+<?php endif; ?>
+
+<?php $this->endblock(); ?>

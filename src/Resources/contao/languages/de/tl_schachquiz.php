@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * Contao Schachquiz Bundle.
+ *
+ * @license LGPL-3.0-or-later
+ */
+
+$GLOBALS['TL_LANG']['tl_schachquiz']['title_legend'] = 'Thema';
+$GLOBALS['TL_LANG']['tl_schachquiz']['publish_legend'] = 'Veröffentlichung';
+
+$GLOBALS['TL_LANG']['tl_schachquiz']['title'] = ['Titel', 'Name des Themas, etwa „Schachregeln" oder „Eröffnungen". Er erscheint im Frontend als Auswahl.'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['beschreibung'] = ['Beschreibung', 'Optionale Beschreibung für die Redaktion.'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['published'] = ['Veröffentlicht', 'Nur Fragen veröffentlichter Themen erscheinen im Quiz.'];
+
+$GLOBALS['TL_LANG']['tl_schachquiz']['new'] = ['Neues Thema', 'Ein neues Quizthema anlegen'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['import'] = ['Fragen importieren', 'Fragen aus einer CSV- oder JSON-Datei importieren'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['edit'] = ['Fragen bearbeiten', 'Fragen des Themas ID %s bearbeiten'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['editheader'] = ['Thema bearbeiten', 'Einstellungen des Themas ID %s bearbeiten'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['copy'] = ['Thema duplizieren', 'Thema ID %s duplizieren'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['delete'] = ['Thema löschen', 'Thema ID %s samt Fragen löschen'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['toggle'] = ['Thema veröffentlichen/verstecken', 'Thema ID %s veröffentlichen oder verstecken'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['show'] = ['Details', 'Details des Themas ID %s anzeigen'];
+
+// Importseite (Backend\ImportModul)
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_datei'] = 'Datei (CSV oder JSON)';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_dateiHilfe'] = 'CSV mit Kopfzeile (Semikolon, Komma oder Tabulator, UTF-8 oder Excel-Kodierung) oder JSON.';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_ziel'] = 'Zielthema';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_zielHilfe'] = 'Ohne Zielthema werden die Themen aus der Spalte „thema“ bzw. dem JSON-Feld „themen“ angelegt oder ergänzt.';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_ausDatei'] = 'Themen aus der Datei übernehmen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_vorlagen'] = 'Vorlagen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_vorlageCsv'] = 'CSV-Vorlage herunterladen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_vorlageJson'] = 'JSON-Vorlage herunterladen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_spalten'] = 'Spalten der CSV-Datei: thema, beschreibung, frage, typ (single/multiple), schwierigkeit (1–10), fen, brett (auto/weiss/schwarz), antwort1 … antwort6, richtig (z. B. „2“ oder „1,3“), erklaerung. Wortgleiche Fragen im selben Thema werden übersprungen, dieselbe Datei lässt sich also gefahrlos erneut einspielen.';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_absenden'] = 'Importieren';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_beispiel'] = 'Mitgelieferte Beispielfragen einspielen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_keineDatei'] = 'Bitte eine CSV- oder JSON-Datei auswählen.';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_nichtsGueltig'] = 'Die Datei enthielt keine gültige Frage. Es wurde nichts importiert.';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_abgebrochen'] = 'Der Import wurde abgebrochen, es wurde nichts gespeichert: %s';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_erfolg'] = '%d Fragen importiert';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_neueThemen'] = ', %d neue Themen angelegt';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_uebersprungen'] = ', %d bereits vorhandene Fragen übersprungen';
+$GLOBALS['TL_LANG']['tl_schachquiz']['import_weitereFehler'] = '… und %d weitere Fehler.';

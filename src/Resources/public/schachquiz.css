@@ -1,0 +1,609 @@
+/*
+ * Contao Schachquiz Bundle – Stylesheet.
+ *
+ * Alle Farben stehen als Variablen an .schachquiz und lassen sich im Theme
+ * überschreiben. Die Figuren bewegen sich nur, wenn der Besucher im
+ * Betriebssystem keine reduzierte Bewegung eingestellt hat.
+ *
+ * @license LGPL-3.0-or-later
+ */
+
+.schachquiz {
+    --sq-hell: #f0d9b5;
+    --sq-dunkel: #b58863;
+    --sq-rand: #d9d4cc;
+    --sq-flaeche: #fff;
+    --sq-text: inherit;
+    --sq-leise: #6b6b6b;
+    --sq-akzent: #2f6f9f;
+    --sq-richtig: #2e7d32;
+    --sq-richtig-grund: #e7f4e8;
+    --sq-falsch: #c62828;
+    --sq-falsch-grund: #fdecea;
+    --sq-figur: #3b3b3b;
+    --sq-radius: .5rem;
+
+    color: var(--sq-text);
+    max-width: 60rem;
+}
+
+/* --- Kopf: Themenwahl und Wertung ------------------------------------- */
+
+.schachquiz__kopf {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.schachquiz__themen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.schachquiz__thema {
+    font: inherit;
+    font-size: .9em;
+    padding: .3em .8em;
+    border: 1px solid var(--sq-rand);
+    border-radius: 999px;
+    background: var(--sq-flaeche);
+    color: inherit;
+    cursor: pointer;
+}
+
+.schachquiz__thema[aria-pressed="true"] {
+    background: var(--sq-akzent);
+    border-color: var(--sq-akzent);
+    color: #fff;
+}
+
+.schachquiz__stand {
+    font-variant-numeric: tabular-nums;
+    color: var(--sq-leise);
+}
+
+.schachquiz__stand strong {
+    color: var(--sq-text);
+    font-size: 1.25em;
+}
+
+/* --- Tisch: Brett, Fragekarte, Figuren -------------------------------- */
+
+.schachquiz__tisch {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+@media (min-width: 46rem) {
+    .schachquiz__tisch:has(.schachquiz__brett:not([hidden])) {
+        grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr);
+    }
+
+    .schachquiz__tisch:has(.schachquiz__brett:not([hidden])) .schachquiz__figuren {
+        grid-column: 1 / -1;
+    }
+}
+
+.schachquiz__brett {
+    container-type: inline-size;
+    width: 100%;
+    max-width: 24rem;
+}
+
+.schachquiz__felder {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    aspect-ratio: 1;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .25);
+}
+
+/* min-height: 0 verhindert, dass eine Figur ihre Reihe höher zieht. */
+.schachquiz__feld {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.schachquiz__feld--hell { background: var(--sq-hell); }
+.schachquiz__feld--dunkel { background: var(--sq-dunkel); }
+
+.schachquiz__stein {
+    font-size: 10cqw;
+    font-family: "Segoe UI Symbol", "DejaVu Sans", "Noto Sans Symbols2", "Arial Unicode MS", serif;
+    user-select: none;
+}
+
+.schachquiz__stein--schwarz {
+    color: #1b1b1b;
+    text-shadow: 0 0 1px rgba(255, 255, 255, .6);
+}
+
+/* Weiße Figuren: das gefüllte Zeichen weiß mit dunklem Umriss. */
+.schachquiz__stein--weiss {
+    color: #fff;
+    text-shadow:
+        -1px -1px 0 #222, 1px -1px 0 #222,
+        -1px 1px 0 #222, 1px 1px 0 #222;
+}
+
+.schachquiz__koord {
+    position: absolute;
+    font-size: 2.4cqw;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1;
+    opacity: .75;
+}
+
+.schachquiz__koord--reihe { top: .25em; left: .25em; }
+.schachquiz__koord--linie { right: .3em; bottom: .2em; }
+.schachquiz__feld--hell .schachquiz__koord { color: var(--sq-dunkel); }
+.schachquiz__feld--dunkel .schachquiz__koord { color: var(--sq-hell); }
+
+.schachquiz__zug {
+    margin: .5rem 0 0;
+    font-size: .9em;
+    color: var(--sq-leise);
+}
+
+.schachquiz__zug::before {
+    content: "";
+    display: inline-block;
+    width: .8em;
+    height: .8em;
+    margin-right: .4em;
+    border: 1px solid #555;
+    border-radius: 50%;
+    vertical-align: -.05em;
+}
+
+.schachquiz__zug--weiss::before { background: #fff; }
+.schachquiz__zug--schwarz::before { background: #1b1b1b; }
+
+.schachquiz__karte {
+    min-width: 0;
+}
+
+.schachquiz__meta {
+    margin: 0 0 .35rem;
+    font-size: .85em;
+    color: var(--sq-leise);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.schachquiz__frage {
+    font-size: 1.2em;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: pre-line;
+}
+
+.schachquiz__hinweis {
+    margin: .35rem 0 .9rem;
+    font-size: .9em;
+    color: var(--sq-leise);
+    min-height: 1.3em;
+}
+
+/* --- Antworten --------------------------------------------------------- */
+
+.schachquiz__antworten {
+    display: grid;
+    gap: .5rem;
+}
+
+.schachquiz__antwort {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    width: 100%;
+    min-height: 2.9rem;
+    padding: .55rem .8rem;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    background: var(--sq-flaeche);
+    border: 1px solid var(--sq-rand);
+    border-radius: var(--sq-radius);
+    cursor: pointer;
+    transition: border-color .15s, background-color .15s, transform .1s;
+}
+
+.schachquiz__antwort:hover:not(:disabled) {
+    border-color: var(--sq-akzent);
+}
+
+.schachquiz__antwort:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+.schachquiz__antwort:focus-visible,
+.schachquiz__thema:focus-visible,
+.schachquiz__aktionen button:focus-visible {
+    outline: 3px solid var(--sq-akzent);
+    outline-offset: 2px;
+}
+
+.schachquiz__antwort:disabled {
+    cursor: default;
+}
+
+.schachquiz__marke {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--sq-rand);
+    font-weight: 700;
+    font-size: .85em;
+}
+
+.schachquiz__antwort.ist-gewaehlt {
+    border-color: var(--sq-akzent);
+    box-shadow: inset 0 0 0 1px var(--sq-akzent);
+}
+
+.schachquiz__antwort.ist-gewaehlt .schachquiz__marke {
+    background: var(--sq-akzent);
+    border-color: var(--sq-akzent);
+    color: #fff;
+}
+
+.schachquiz__antwort.ist-korrekt {
+    border-color: var(--sq-richtig);
+    background: var(--sq-richtig-grund);
+}
+
+.schachquiz__antwort.ist-korrekt .schachquiz__marke {
+    background: var(--sq-richtig);
+    border-color: var(--sq-richtig);
+    color: #fff;
+}
+
+.schachquiz__antwort.ist-daneben {
+    border-color: var(--sq-falsch);
+    background: var(--sq-falsch-grund);
+}
+
+.schachquiz__antwort.ist-daneben .schachquiz__marke {
+    background: var(--sq-falsch);
+    border-color: var(--sq-falsch);
+    color: #fff;
+}
+
+/* Richtige Antwort, die nicht gewählt wurde: nur gestrichelt markieren. */
+.schachquiz__antwort.ist-verpasst {
+    border-style: dashed;
+}
+
+.schachquiz__antwort.ist-korrekt .schachquiz__marke::after { content: "✓"; margin-left: .2em; }
+.schachquiz__antwort.ist-daneben .schachquiz__marke::after { content: "✗"; margin-left: .2em; }
+.schachquiz__antwort.ist-korrekt .schachquiz__marke,
+.schachquiz__antwort.ist-daneben .schachquiz__marke { width: auto; padding: 0 .45rem; border-radius: 999px; }
+
+/* --- Auswertung und Knöpfe --------------------------------------------- */
+
+.schachquiz__auswertung {
+    margin-top: 1rem;
+    padding: .8rem 1rem;
+    border-radius: var(--sq-radius);
+    background: rgba(127, 127, 127, .08);
+}
+
+.schachquiz__urteil {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.1em;
+    font-variant-numeric: tabular-nums;
+}
+
+.schachquiz__urteil--richtig { color: var(--sq-richtig); }
+.schachquiz__urteil--falsch { color: var(--sq-falsch); }
+
+.schachquiz__erklaerung {
+    margin: .4rem 0 0;
+    white-space: pre-line;
+}
+
+.schachquiz__aktionen {
+    display: flex;
+    gap: .5rem;
+    margin-top: 1rem;
+}
+
+.schachquiz__aktionen button {
+    font: inherit;
+    font-weight: 600;
+    padding: .6rem 1.3rem;
+    border: 0;
+    border-radius: var(--sq-radius);
+    background: var(--sq-akzent);
+    color: #fff;
+    cursor: pointer;
+}
+
+.schachquiz__aktionen button:disabled {
+    opacity: .45;
+    cursor: default;
+}
+
+.schachquiz__gasthinweis {
+    margin-top: 1rem;
+    font-size: .85em;
+    color: var(--sq-leise);
+}
+
+.schachquiz.ist-laden .schachquiz__karte {
+    opacity: .55;
+    transition: opacity .2s;
+}
+
+/* --- Die Figurenrunde -------------------------------------------------- */
+
+.schachquiz__figuren {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: .9rem;
+    height: 4.2rem;
+    padding-top: 1.2rem;
+    border-bottom: 2px solid var(--sq-rand);
+    color: var(--sq-figur);
+    user-select: none;
+}
+
+.schachquiz__figur {
+    position: relative;
+    display: inline-block;
+    font-size: 2.4rem;
+    line-height: 1;
+    font-family: "Segoe UI Symbol", "DejaVu Sans", "Noto Sans Symbols2", "Arial Unicode MS", serif;
+    transform-origin: 50% 100%;
+    transition: color .4s, opacity .4s;
+}
+
+.schachquiz__figur--koenig { font-size: 2.7rem; }
+.schachquiz__figur--bauer { font-size: 2rem; }
+
+.schachquiz__figur i {
+    font-style: normal;
+}
+
+/* Denkblase und Träne des Königs, im Ruhezustand unsichtbar. */
+.schachquiz__blase {
+    position: absolute;
+    top: -1.1rem;
+    right: -1.2rem;
+    padding: 0 .35rem;
+    font-size: .9rem;
+    line-height: 1.2rem;
+    border-radius: .6rem;
+    background: var(--sq-flaeche);
+    border: 1px solid var(--sq-rand);
+    color: var(--sq-leise);
+    opacity: 0;
+}
+
+.schachquiz__traene {
+    position: absolute;
+    top: 1.05rem;
+    left: 30%;
+    width: .3rem;
+    height: .45rem;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: #64a8e0;
+    opacity: 0;
+}
+
+.schachquiz__funken {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.schachquiz__funken i {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    font-style: normal;
+    font-size: .9rem;
+    color: #e0a100;
+    opacity: 0;
+}
+
+.schachquiz__differenz {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    opacity: 0;
+}
+
+.schachquiz.ist-richtig .schachquiz__differenz { color: var(--sq-richtig); opacity: 1; }
+.schachquiz.ist-falsch .schachquiz__differenz { color: var(--sq-falsch); opacity: 1; }
+
+.schachquiz.ist-laden .schachquiz__figur { opacity: .45; }
+
+@media (prefers-reduced-motion: no-preference) {
+
+    /* Denkphase: kaum merkliche, langsame Bewegungen, zeitversetzt. */
+    .schachquiz.ist-denken .schachquiz__figur--bauer { animation: sq-wippen 3.2s ease-in-out infinite; }
+    .schachquiz.ist-denken .schachquiz__figur--springer { animation: sq-kopfneigen 4.6s ease-in-out 1s infinite; }
+    .schachquiz.ist-denken .schachquiz__figur--dame { animation: sq-wiegen 5.4s ease-in-out .4s infinite; }
+    .schachquiz.ist-denken .schachquiz__figur--koenig { animation: sq-wippen 6s ease-in-out 2s infinite; }
+    .schachquiz.ist-denken .schachquiz__blase { animation: sq-blase 7s ease-in-out 1.5s infinite; }
+
+    /* Richtig: Freudensprünge nacheinander, der Springer schlägt ein Rad. */
+    .schachquiz.ist-richtig .schachquiz__figur { animation: sq-sprung .6s cubic-bezier(.3, .7, .4, 1) 2; }
+    .schachquiz.ist-richtig .schachquiz__figur--dame { animation-delay: .08s; }
+    .schachquiz.ist-richtig .schachquiz__figur--springer { animation: sq-rad .9s ease-out .16s 1; }
+    .schachquiz.ist-richtig .schachquiz__figur--bauer { animation-delay: .24s; }
+    .schachquiz.ist-richtig .schachquiz__funken i { animation: sq-funke 1s ease-out forwards; }
+    .schachquiz.ist-richtig .schachquiz__funken i:nth-child(1) { --sq-x: -5rem; --sq-y: -2.4rem; }
+    .schachquiz.ist-richtig .schachquiz__funken i:nth-child(2) { --sq-x: -2.4rem; --sq-y: -3.2rem; animation-delay: .1s; }
+    .schachquiz.ist-richtig .schachquiz__funken i:nth-child(3) { --sq-x: 0rem; --sq-y: -3.6rem; animation-delay: .05s; }
+    .schachquiz.ist-richtig .schachquiz__funken i:nth-child(4) { --sq-x: 2.6rem; --sq-y: -3rem; animation-delay: .15s; }
+    .schachquiz.ist-richtig .schachquiz__funken i:nth-child(5) { --sq-x: 5rem; --sq-y: -2.2rem; animation-delay: .2s; }
+    .schachquiz.ist-richtig .schachquiz__differenz { animation: sq-aufsteigen 1.2s ease-out; }
+
+    /* Falsch: alle lassen die Köpfe hängen, der König kippt um und rappelt sich auf. */
+    .schachquiz.ist-falsch .schachquiz__figur { animation: sq-haengen .7s ease-out forwards; }
+    .schachquiz.ist-falsch .schachquiz__figur--koenig { animation: sq-umfallen 2.6s ease-in-out forwards; }
+    .schachquiz.ist-falsch .schachquiz__traene { animation: sq-traene 1.6s ease-in .5s 2; }
+    .schachquiz.ist-falsch .schachquiz__differenz { animation: sq-absinken 1.2s ease-out; }
+}
+
+/* Ohne Bewegung zeigen die Figuren die Stimmung nur durch Farbe und Haltung. */
+.schachquiz.ist-richtig .schachquiz__figur { color: var(--sq-richtig); }
+.schachquiz.ist-falsch .schachquiz__figur { color: #8a8a8a; }
+
+@media (prefers-reduced-motion: reduce) {
+    .schachquiz.ist-falsch .schachquiz__figur { transform: rotate(-8deg); }
+}
+
+.schachquiz--ruhig .schachquiz__figuren { display: none; }
+
+@keyframes sq-wippen {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+@keyframes sq-kopfneigen {
+    0%, 70%, 100% { transform: rotate(0); }
+    80% { transform: rotate(-6deg); }
+    90% { transform: rotate(3deg); }
+}
+
+@keyframes sq-wiegen {
+    0%, 100% { transform: rotate(0); }
+    30% { transform: rotate(2.5deg); }
+    60% { transform: rotate(-2deg); }
+}
+
+@keyframes sq-blase {
+    0%, 55%, 100% { opacity: 0; transform: translateY(3px); }
+    65%, 90% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sq-sprung {
+    0% { transform: translateY(0) scale(1, 1); }
+    15% { transform: translateY(0) scale(1.08, .9); }
+    45% { transform: translateY(-1.1rem) scale(.95, 1.06); }
+    75% { transform: translateY(0) scale(1.05, .94); }
+    100% { transform: translateY(0) scale(1, 1); }
+}
+
+@keyframes sq-rad {
+    0% { transform: translateY(0) rotate(0); }
+    40% { transform: translateY(-1.3rem) rotate(-200deg); }
+    80% { transform: translateY(0) rotate(-360deg); }
+    100% { transform: translateY(0) rotate(-360deg); }
+}
+
+@keyframes sq-funke {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(.4); }
+    30% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--sq-x)), var(--sq-y)) scale(1.1) rotate(90deg); }
+}
+
+@keyframes sq-aufsteigen {
+    from { transform: translateY(.8rem); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes sq-absinken {
+    from { transform: translateY(-.8rem); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes sq-haengen {
+    to { transform: rotate(-9deg) translateY(2px) scale(.96); }
+}
+
+@keyframes sq-umfallen {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(-8deg); }
+    40% { transform: rotate(84deg); }
+    45% { transform: rotate(78deg); }
+    50%, 70% { transform: rotate(82deg); }
+    90% { transform: rotate(-4deg); }
+    100% { transform: rotate(-6deg) translateY(2px); }
+}
+
+@keyframes sq-traene {
+    0% { opacity: 0; transform: translateY(0); }
+    20% { opacity: .9; }
+    100% { opacity: 0; transform: translateY(1.4rem); }
+}
+
+/* --- Rangliste --------------------------------------------------------- */
+
+.schachquiz-rangliste {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.schachquiz-rangliste th,
+.schachquiz-rangliste td {
+    padding: .45rem .6rem;
+    border-bottom: 1px solid #e3e0da;
+    text-align: left;
+}
+
+.schachquiz-rangliste th {
+    font-size: .85em;
+    font-weight: 600;
+    color: #6b6b6b;
+}
+
+.schachquiz-rangliste__zahl,
+.schachquiz-rangliste__platz {
+    text-align: right !important;
+    white-space: nowrap;
+}
+
+.schachquiz-rangliste__platz { width: 3.5em; }
+
+.schachquiz-rangliste__eigene td {
+    background: #fff7dc;
+    font-weight: 600;
+}
+
+.schachquiz-rangliste tfoot td {
+    border-top: 2px solid #e3e0da;
+}
+
+.schachquiz-rangliste__hinweis {
+    font-size: .85em;
+    color: #6b6b6b;
+}
+
+@media (max-width: 30rem) {
+    .schachquiz-rangliste th:nth-child(4),
+    .schachquiz-rangliste td:nth-child(4),
+    .schachquiz-rangliste th:nth-child(6),
+    .schachquiz-rangliste td:nth-child(6) {
+        display: none;
+    }
+}

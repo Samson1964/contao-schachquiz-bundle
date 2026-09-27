@@ -1,0 +1,67 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php
+// Einstellungen für das Skript. Die Fragen selbst kommen per POST über die
+// Route schachquiz_aktion; die Seite enthält nichts Persönliches.
+$konfiguration = [
+    'frage' => $this->adresseFrage,
+    'antwort' => $this->adresseAntwort,
+    'animationen' => $this->animationen,
+    'texte' => $this->texte,
+];
+?>
+<div class="schachquiz<?= $this->animationen ? '' : ' schachquiz--ruhig' ?>" data-schachquiz="<?= htmlspecialchars(json_encode($konfiguration, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), ENT_QUOTES) ?>">
+
+  <div class="schachquiz__kopf">
+    <?php if (count($this->themen) > 1): ?>
+      <div class="schachquiz__themen" role="group" aria-label="<?= $this->texte['thema'] ?? 'Thema' ?>">
+        <button type="button" class="schachquiz__thema" data-thema="0" aria-pressed="true"><?= $this->texte['alleThemen'] ?? 'Alle Themen' ?></button>
+        <?php foreach ($this->themen as $thema): ?>
+          <button type="button" class="schachquiz__thema" data-thema="<?= $thema['id'] ?>" aria-pressed="false"><?= htmlspecialchars($thema['titel']) ?></button>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+    <div class="schachquiz__stand" aria-live="polite"></div>
+  </div>
+
+  <div class="schachquiz__tisch">
+    <div class="schachquiz__brett" hidden></div>
+
+    <div class="schachquiz__karte">
+      <p class="schachquiz__meta"></p>
+      <div class="schachquiz__frage" aria-live="polite"><?= $this->texte['laden'] ?? '' ?></div>
+      <p class="schachquiz__hinweis"></p>
+      <div class="schachquiz__antworten"></div>
+
+      <div class="schachquiz__auswertung" role="status" hidden>
+        <p class="schachquiz__urteil"></p>
+        <p class="schachquiz__erklaerung"></p>
+      </div>
+
+      <div class="schachquiz__aktionen">
+        <button type="button" class="schachquiz__abgeben" hidden><?= $this->texte['antworten'] ?? 'Antworten' ?></button>
+        <button type="button" class="schachquiz__weiter" hidden><?= $this->texte['weiter'] ?? 'Nächste Frage' ?></button>
+      </div>
+    </div>
+
+    <?php if ($this->animationen): ?>
+      <?php // Die Figurenrunde: denkt mit, jubelt, trauert. Rein dekorativ. ?>
+      <div class="schachquiz__figuren" aria-hidden="true">
+        <span class="schachquiz__figur schachquiz__figur--koenig">&#9818;&#65038;<i class="schachquiz__blase">…</i><i class="schachquiz__traene"></i></span>
+        <span class="schachquiz__figur schachquiz__figur--dame">&#9819;&#65038;</span>
+        <span class="schachquiz__figur schachquiz__figur--springer">&#9822;&#65038;</span>
+        <span class="schachquiz__figur schachquiz__figur--bauer">&#9823;&#65038;</span>
+        <span class="schachquiz__funken"><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i></span>
+        <span class="schachquiz__differenz"></span>
+      </div>
+    <?php endif; ?>
+  </div>
+
+  <p class="schachquiz__gasthinweis" hidden><?= $this->texte['gast'] ?? '' ?></p>
+
+  <noscript><p><?= $this->texte['ohneJs'] ?? '' ?></p></noscript>
+</div>
+
+<?php $this->endblock(); ?>

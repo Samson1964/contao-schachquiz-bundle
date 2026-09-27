@@ -1,0 +1,39 @@
+# Quelle für die Metadaten im Contao Manager (contao/package-metadata).
+# Änderungen hier werden von Claude in den Fork übertragen.
+#
+# Titel und Beschreibung laufen dort durch eine Rechtschreibprüfung; deshalb
+# „Schach-Quiz“ statt „Schachquiz“ und Umschreibungen statt Komposita.
+# Schlagwörter werden nicht geprüft.
+
+de:
+    title: Schach-Quiz
+    description: >
+        Ein Quiz rund ums Schach mit Fragen, bei denen eine oder mehrere Antworten
+        richtig sind, auf Wunsch mit einer Stellung als Diagramm. Die Wertung folgt
+        Glicko-2: Wer richtig antwortet, bekommt schwerere Fragen. Eine Rangliste
+        zeigt die besten Mitglieder, Fragen lassen sich aus CSV oder JSON importieren.
+    keywords:
+        - Schach
+        - Quiz
+        - Schachquiz
+        - Glicko
+        - Elo
+        - Rangliste
+        - Multiple Choice
+        - FEN
+
+en:
+    title: Chess quiz
+    description: >
+        A chess quiz with single and multiple choice questions, optionally with a
+        position shown as a diagram. Ratings follow Glicko-2, so correct answers lead
+        to harder questions. A ranking lists the best members, and questions can be
+        imported from CSV or JSON.
+    keywords:
+        - chess
+        - quiz
+        - Glicko
+        - Elo
+        - ranking
+        - multiple choice
+        - FEN

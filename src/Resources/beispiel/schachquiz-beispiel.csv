@@ -1,0 +1,6 @@
+thema;frage;typ;schwierigkeit;fen;antwort1;antwort2;antwort3;antwort4;antwort5;antwort6;richtig;erklaerung
+Schachregeln;Wie viele Felder hat ein Schachbrett?;single;1;;48;64;81;100;;;2;8 Reihen mal 8 Linien ergeben 64 Felder.
+Schachregeln;In welche Figuren darf sich ein Bauer auf der letzten Reihe umwandeln?;multiple;3;;Dame;Turm;Läufer;Springer;König;;1,2,3,4;Erlaubt sind Dame, Turm, Läufer und Springer derselben Farbe.
+Taktik;Weiß am Zug. Welcher Zug setzt matt?;single;2;6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1;Te8#;Te7;h3;Kf1;;;1;Das klassische Grundreihenmatt.
+Schachgeschichte;Wer war der erste offizielle Schachweltmeister?;;4;;Paul Morphy;Wilhelm Steinitz;Emanuel Lasker;Adolf Anderssen;;;B;"Steinitz gewann 1886 den ersten offiziellen Weltmeisterschaftskampf.
+Gegner war Johannes Zukertort."

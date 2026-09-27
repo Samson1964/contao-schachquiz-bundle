@@ -1,0 +1,73 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            # Der CSRF-Dienst hat nicht in jeder Contao-Fassung einen Alias
+            # auf den Klassennamen und kommt deshalb über die Dienst-ID.
+            $tokenManager: '@contao.csrf.token_manager'
+
+    # --- Rechnen, Lesen, Speichern -----------------------------------------
+
+    Schachbulle\ContaoSchachquizBundle\Wertung\Glicko2: ~
+
+    Schachbulle\ContaoSchachquizBundle\Import\FragenLeser: ~
+
+    Schachbulle\ContaoSchachquizBundle\Import\FragenSpeicher: ~
+
+    Schachbulle\ContaoSchachquizBundle\Quiz\Fragenauswahl: ~
+
+    Schachbulle\ContaoSchachquizBundle\Quiz\TeilnehmerSpeicher: ~
+
+    Schachbulle\ContaoSchachquizBundle\Quiz\QuizDienst: ~
+
+    Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste: ~
+
+    # --- Frontend ----------------------------------------------------------
+
+    # Schnittstelle für das Quiz-Skript. Erbt nicht von AbstractController
+    # und braucht deshalb den Tag, sonst bliebe der Dienst privat.
+    Schachbulle\ContaoSchachquizBundle\Controller\QuizController:
+        tags: ['controller.service_arguments']
+
+    Schachbulle\ContaoSchachquizBundle\Controller\FrontendModule\SchachquizController:
+        tags:
+            - name: contao.frontend_module
+              category: schachquiz
+              type: schachquiz
+              template: mod_schachquiz
+
+    Schachbulle\ContaoSchachquizBundle\Controller\FrontendModule\RanglisteController:
+        tags:
+            - name: contao.frontend_module
+              category: schachquiz
+              type: schachquiz_rangliste
+              template: mod_schachquiz_rangliste
+
+    # --- Backend -----------------------------------------------------------
+
+    # Der key-Rückruf `import` im Backend-Modul holt die Klasse über
+    # System::importStatic() — das findet nur öffentliche Dienste.
+    Schachbulle\ContaoSchachquizBundle\Backend\ImportModul:
+        public: true
+
+    # Der Tag hängt an `target` selbsttätig `_callback` an; die Schreibweise
+    # ist in Contao 4.13 und Contao 5 dieselbe.
+    Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\FragenListener:
+        tags:
+            - { name: contao.callback, table: tl_schachquiz_items, target: list.sorting.child_record, method: listenzeile }
+            - { name: contao.callback, table: tl_schachquiz_items, target: fields.fen.save, method: pruefeFen }
+            - { name: contao.callback, table: tl_schachquiz_items, target: fields.richtig.save, method: pruefeRichtig }
+            - { name: contao.callback, table: tl_schachquiz_items, target: fields.richtig.options, method: richtigOptionen }
+            - { name: contao.callback, table: tl_schachquiz_items, target: fields.schwierigkeit.options, method: stufenOptionen }
+            - { name: contao.callback, table: tl_schachquiz_items, target: config.onsubmit, method: setzeAnfangswertung }
+
+    Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\SpielerListener:
+        tags:
+            - { name: contao.callback, table: tl_schachquiz_spieler, target: list.label.label, method: beschriftung }
+            - { name: contao.callback, table: tl_schachquiz_spieler, target: config.ondelete, method: loescheVerlauf }
+
+    Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\ModulListener:
+        tags:
+            - { name: contao.callback, table: tl_module, target: fields.schachquiz_themen.options, method: themenOptionen }
