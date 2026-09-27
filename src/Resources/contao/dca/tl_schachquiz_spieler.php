@@ -21,6 +21,9 @@ use Contao\DC_Table;
 $GLOBALS['TL_DCA']['tl_schachquiz_spieler'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
+        // Aufgerufen als Unteransicht von do=schachquiz; ohne eigene Elterntabelle
+        // braucht die Liste den Rückweg ausdrücklich.
+        'backlink' => 'do=schachquiz',
         'closed' => true,
         'notEditable' => true,
         'notCopyable' => true,

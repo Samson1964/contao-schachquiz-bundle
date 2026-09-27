@@ -24,8 +24,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  * Glicko-2-Wertung.
  *
  * Ist ein Mitglied angemeldet, wird seine Zeile hervorgehoben; steht es nicht
- * unter den gezeigten Plätzen, erscheint es zusätzlich unter der Liste mit
- * seinem tatsächlichen Rang.
+ * unter den gezeigten Plätzen, erscheint es nach einer Leerzeile unter der
+ * Liste mit seinem tatsächlichen Rang. Hat es die Mindestzahl an Antworten
+ * noch nicht erreicht, steht dort statt des Rangs ein Hinweis, wie viele
+ * Antworten noch fehlen.
  */
 class RanglisteController extends AbstractFrontendModuleController
 {

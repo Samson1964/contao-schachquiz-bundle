@@ -27,7 +27,10 @@ Danach die Datenbank aktualisieren (Contao Manager oder `contao:migrate`).
    Einstellungen: welche Themen gelten (ohne Auswahl alle), ob Gäste mitspielen
    dürfen, ob die Figuren-Animationen laufen.
 3. Optional das **Modul „Schachquiz-Rangliste"** anlegen: Anzahl der Plätze,
-   Mindestzahl an Antworten, Namensformat (Standard: „Anna S.").
+   Mindestzahl an Antworten, Namensformat (Standard: „Anna S."). Ein angemeldetes
+   Mitglied sieht seinen eigenen Platz immer, auch wenn er weiter hinten liegt
+   (nach einer Leerzeile unter der Liste) oder es die Mindestzahl noch nicht
+   erreicht hat (dann mit Hinweis, wie viele Antworten noch fehlen).
 
 ## Fragen
 
@@ -71,8 +74,8 @@ leichter oder schwerer sind als gedacht.
 * Wer die Seite neu lädt, bekommt dieselbe offene Frage wieder. Eine unbequeme
   Frage lässt sich also nicht wegklicken. Ein Themenwechsel verwirft die offene
   Frage ohne Wertung; sie bleibt aber verbraucht.
-* Im Backend unter „Quiz-Wertungen" setzt das Löschen eines Eintrags ein Mitglied
-  samt Verlauf zurück.
+* Im Backend unter Schachquiz → „Quiz-Wertungen" setzt das Löschen eines Eintrags
+  ein Mitglied samt Verlauf zurück.
 
 ## Import
 
@@ -129,6 +132,11 @@ bloße Liste von Fragen wird ebenfalls verstanden.
 ## Anpassen
 
 * **Templates:** `mod_schachquiz.html5` und `mod_schachquiz_rangliste.html5`.
+* **Brett und Figuren:** Die Figuren sind Vektorgrafiken (Satz „Cburnett", bekannt
+  von lichess und Wikipedia) in `bundles/contaoschachquiz/figuren/cburnett.svg`; das
+  Brett ist standardmäßig blaugrau. Die Feldfarben lassen sich über `--sq-hell` und
+  `--sq-dunkel` ändern, etwa `#f0d9b5`/`#b58863` für Holz oder `#eeeed2`/`#769656`
+  für Grün.
 * **Farben:** Alle Farben stehen als CSS-Variablen an `.schachquiz`
   (`--sq-hell`, `--sq-dunkel`, `--sq-akzent`, `--sq-richtig`, `--sq-falsch` …)
   und lassen sich im Theme überschreiben.
@@ -171,4 +179,10 @@ und Mitglieder. Prüfthema und Prüfmitglieder räumt er danach wieder ab.
 
 ## Lizenz
 
-LGPL-3.0-or-later
+LGPL-3.0-or-later.
+
+Ausgenommen sind die Schachfiguren in `src/Resources/public/figuren/cburnett.svg`:
+Sie stammen von Wikimedia Commons (Cburnett, Rfc1394; bearbeitet von Stefan Haack
+für cm-chessboard) und stehen unter CC BY-SA 3.0
+(<https://creativecommons.org/licenses/by-sa/3.0/>). Der Lizenzhinweis steht auch
+in der Datei selbst.

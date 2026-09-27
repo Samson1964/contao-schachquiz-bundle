@@ -2,11 +2,20 @@
 
 <?php $this->block('content'); ?>
 
-<?php $t = $GLOBALS['TL_LANG']['schachquiz'] ?? []; ?>
+<?php
+$t = $GLOBALS['TL_LANG']['schachquiz'] ?? [];
+$eigene = $this->eigene;
+
+// Zwischen der Liste und dem eigenen Platz steht eine Leerzeile, außer der
+// eigene Platz schließt unmittelbar an die gezeigten Plätze an.
+$luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($this->zeilen) + 1);
+?>
 
 <?php if (empty($this->zeilen)): ?>
   <p class="schachquiz-rangliste__leer"><?= $t['keineEintraege'] ?? '' ?></p>
-<?php else: ?>
+<?php endif; ?>
+
+<?php if (!empty($this->zeilen) || $eigene): ?>
   <table class="schachquiz-rangliste">
     <thead>
       <tr>
@@ -30,15 +39,23 @@
         </tr>
       <?php endforeach; ?>
     </tbody>
-    <?php if ($this->eigene): ?>
+    <?php if ($eigene): ?>
       <tfoot>
+        <?php if ($luecke): ?>
+          <tr class="schachquiz-rangliste__luecke" aria-hidden="true"><td colspan="6">&nbsp;</td></tr>
+        <?php endif; ?>
         <tr class="schachquiz-rangliste__eigene" aria-current="true">
-          <td class="schachquiz-rangliste__platz"><?= $this->eigene['platz'] ?></td>
-          <td class="schachquiz-rangliste__name"><?= htmlspecialchars($this->eigene['name']) ?></td>
-          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['wertung'] ?><?= $this->eigene['vorlaeufig'] ? '?' : '' ?></td>
-          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['anzahl'] ?></td>
-          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['quote'] ?> %</td>
-          <td class="schachquiz-rangliste__zahl"><?= $this->eigene['serie'] ?></td>
+          <td class="schachquiz-rangliste__platz"><?= $eigene['platz'] ?? '–' ?></td>
+          <td class="schachquiz-rangliste__name">
+            <?= htmlspecialchars($eigene['name']) ?>
+            <?php if ($eigene['fehlen'] > 0): ?>
+              <span class="schachquiz-rangliste__fehlen"><?= sprintf($t['nochNichtGewertet'] ?? '', $eigene['fehlen']) ?></span>
+            <?php endif; ?>
+          </td>
+          <td class="schachquiz-rangliste__zahl"><?= $eigene['wertung'] ?><?= $eigene['vorlaeufig'] ? '?' : '' ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $eigene['anzahl'] ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $eigene['quote'] ?> %</td>
+          <td class="schachquiz-rangliste__zahl"><?= $eigene['serie'] ?></td>
         </tr>
       </tfoot>
     <?php endif; ?>

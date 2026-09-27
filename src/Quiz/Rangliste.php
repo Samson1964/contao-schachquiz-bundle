@@ -66,26 +66,36 @@ class Rangliste
     /**
      * Ermittelt den Platz eines einzelnen Mitglieds.
      *
+     * Das angemeldete Mitglied soll sich immer wiederfinden, auch unterhalb der
+     * gezeigten Plätze und auch, bevor es die Mindestzahl an Antworten erreicht
+     * hat. Im zweiten Fall gibt es noch keinen Rang: `platz` ist dann null und
+     * `fehlen` sagt, wie viele Antworten bis zur Wertung noch fehlen.
+     *
      * @param int    $mitglied   ID aus tl_member
      * @param int    $mindestens Nötige Zahl beantworteter Fragen
      * @param string $format     Namensformat wie bei plaetze()
      *
-     * @return array<string, mixed>|null Der Platz wie bei plaetze(), zusätzlich
-     *                                   `eigene` = true; null, wenn das Mitglied
-     *                                   noch nicht gespielt oder zu wenige Fragen
-     *                                   beantwortet hat
+     * @return array<string, mixed>|null Der Platz wie bei plaetze() mit `eigene` =
+     *                                   true und `fehlen`; null nur, wenn das
+     *                                   Mitglied noch gar nicht gespielt hat
      */
     public function eigenerPlatz(int $mitglied, int $mindestens, string $format): ?array
     {
         $zeile = $this->db->fetchAssociative(
             'SELECT s.*, m.firstname, m.lastname, m.username FROM tl_schachquiz_spieler s
                 INNER JOIN tl_member m ON m.id = s.member
-                WHERE s.member = ? AND s.anzahl >= ?',
-            [$mitglied, $mindestens]
+                WHERE s.member = ?',
+            [$mitglied]
         );
 
         if (false === $zeile) {
             return null;
+        }
+
+        $fehlen = max(0, $mindestens - (int) $zeile['anzahl']);
+
+        if ($fehlen > 0) {
+            return ['eigene' => true, 'fehlen' => $fehlen] + $this->platz($zeile, null, $format);
         }
 
         $besser = (int) $this->db->fetchOne(
@@ -95,7 +105,9 @@ class Rangliste
             [$mindestens, $zeile['wertung']]
         );
 
-        return $this->platz($zeile, $besser + 1, $format) + ['eigene' => true];
+        // Die eigenen Schlüssel zuerst: Der Plus-Operator behält bei gleichen
+        // Schlüsseln den linken Wert, und platz() setzt `eigene` auf false.
+        return ['eigene' => true, 'fehlen' => 0] + $this->platz($zeile, $besser + 1, $format);
     }
 
     /**
@@ -103,12 +115,12 @@ class Rangliste
      *
      * @param array<string, mixed> $zeile  Zeile aus tl_schachquiz_spieler samt
      *                                     Namensfeldern aus tl_member
-     * @param int                  $platz  Der Rang
+     * @param int|null             $platz  Der Rang, null wenn noch nicht gewertet
      * @param string               $format Namensformat
      *
      * @return array<string, mixed> Der aufbereitete Platz
      */
-    private function platz(array $zeile, int $platz, string $format): array
+    private function platz(array $zeile, ?int $platz, string $format): array
     {
         $stand = Wertungsstand::ausZeile($zeile);
         $anzahl = (int) $zeile['anzahl'];

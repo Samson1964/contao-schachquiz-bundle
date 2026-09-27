@@ -103,6 +103,8 @@ $container->get('contao.framework')->initialize();
 
 melde('Frontend-Modul schachquiz angemeldet', isset($GLOBALS['FE_MOD']['schachquiz']['schachquiz']));
 melde('Frontend-Modul schachquiz_rangliste angemeldet', isset($GLOBALS['FE_MOD']['schachquiz']['schachquiz_rangliste']));
+melde('Wertungen als Tabelle im Modul Schachquiz, kein eigenes Modul', in_array('tl_schachquiz_spieler', $GLOBALS['BE_MOD']['schachquiz']['schachquiz']['tables'] ?? [], true) && !isset($GLOBALS['BE_MOD']['schachquiz']['schachquiz_spieler']));
+melde('Figurensatz liegt im Bundle', 12 <= substr_count((string) @file_get_contents(dirname(__DIR__).'/src/Resources/public/figuren/cburnett.svg'), '<g id="'));
 melde('Backend-Modul mit Import-Rückruf', ($GLOBALS['BE_MOD']['schachquiz']['schachquiz']['import'] ?? null) === [ImportModul::class, 'zeige']);
 melde('Import-Seite als öffentlicher Dienst', $container->has(ImportModul::class));
 melde('Quiz-Schnittstelle als öffentlicher Dienst', $container->has(QuizController::class));
@@ -129,6 +131,7 @@ $rueckrufe = $GLOBALS['TL_DCA']['tl_schachquiz_items']['list']['sorting']['child
 melde('child_record_callback der Fragen verdrahtet', is_array($rueckrufe) || is_callable($rueckrufe));
 melde('save_callback der FEN verdrahtet', !empty($GLOBALS['TL_DCA']['tl_schachquiz_items']['fields']['fen']['save_callback']));
 melde('options_callback der Modulthemen verdrahtet', !empty($GLOBALS['TL_DCA']['tl_module']['fields']['schachquiz_themen']['options_callback']));
+melde('Globale Operation „Quiz-Wertungen“ in der Themenliste', 'table=tl_schachquiz_spieler' === ($GLOBALS['TL_DCA']['tl_schachquiz']['list']['global_operations']['wertungen']['href'] ?? null) && 'do=schachquiz' === ($GLOBALS['TL_DCA']['tl_schachquiz_spieler']['config']['backlink'] ?? null));
 
 foreach ([['tl_schachquiz', 'default'], ['tl_schachquiz_items', 'default'], ['tl_module', 'schachquiz'], ['tl_module', 'schachquiz_rangliste']] as [$tabelle, $palette]) {
     $felder = $GLOBALS['TL_DCA'][$tabelle]['fields'];
@@ -339,6 +342,9 @@ melde('Mitglied: nach 40 gestellten Fragen ist Schluss', 'leer' === $quiz->frage
 
 $platz = (new Rangliste($db))->eigenerPlatz($mitglied, 0, 'kurz');
 melde('Rangliste: Name im Kurzformat', 'Paula P.' === ($platz['name'] ?? null), $platz['name'] ?? '');
+melde('Rangliste: eigener Platz ist als eigener markiert', true === ($platz['eigene'] ?? null) && is_int($platz['platz']));
+$ungewertet = (new Rangliste($db))->eigenerPlatz($mitglied, 50, 'kurz');
+melde('Rangliste: unter der Mindestzahl ohne Rang, mit fehlenden Antworten', is_array($ungewertet) && array_key_exists('platz', $ungewertet) && null === $ungewertet['platz'] && 49 === $ungewertet['fehlen'], json_encode($ungewertet));
 
 // Anmeldung nach dem Ziehen als Gast: Der Verlauf wird nachgetragen.
 $wechselSitzung = sitzung();

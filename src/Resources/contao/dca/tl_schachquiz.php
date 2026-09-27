@@ -44,6 +44,11 @@ $GLOBALS['TL_DCA']['tl_schachquiz'] = [
             'format' => '%s',
         ],
         'global_operations' => [
+            'wertungen' => [
+                'href' => 'table=tl_schachquiz_spieler',
+                'icon' => 'mgroup.svg',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
+            ],
             'import' => [
                 'href' => 'key=import',
                 'class' => 'header_new',

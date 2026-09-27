@@ -34,6 +34,7 @@ $GLOBALS['TL_LANG']['schachquiz']['besteSerie'] = 'Best streak';
 $GLOBALS['TL_LANG']['schachquiz']['keineEintraege'] = 'Nobody has answered enough questions yet.';
 $GLOBALS['TL_LANG']['schachquiz']['vorlaeufigHinweis'] = '? = provisional rating, too few answers for a reliable estimate.';
 $GLOBALS['TL_LANG']['schachquiz']['mindestensHinweis'] = 'Listed from %d answered questions.';
+$GLOBALS['TL_LANG']['schachquiz']['nochNichtGewertet'] = '(%d more answers until ranked)';
 
 $GLOBALS['TL_LANG']['schachquiz']['meldung_anmelden'] = 'Please log in to take part in the quiz.';
 $GLOBALS['TL_LANG']['schachquiz']['meldung_alleGehabt'] = 'You have already had all questions of this selection. Choose another topic or come back later.';

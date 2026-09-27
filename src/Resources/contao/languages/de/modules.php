@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 // Backend-Modulgruppe und Module
 $GLOBALS['TL_LANG']['MOD']['schachquiz'] = ['Schachquiz', 'Quizthemen, Fragen und Antworten verwalten.'];
-$GLOBALS['TL_LANG']['MOD']['schachquiz_spieler'] = ['Quiz-Wertungen', 'Glicko-2-Wertungen der Mitglieder ansehen und zurücksetzen.'];
 
 // Frontend-Modulgruppe und Module
 $GLOBALS['TL_LANG']['FMD']['schachquiz'] = ['Schachquiz', 'Quizfragen mit Wertung nach Glicko-2 beantworten.'];

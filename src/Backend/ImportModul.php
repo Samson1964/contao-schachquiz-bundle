@@ -205,7 +205,9 @@ class ImportModul
      *
      * Die Markierung folgt den Klassen des Contao-Backends (tl_form,
      * widget, tl_submit), damit die Seite in beiden Fassungen wie eine
-     * gewöhnliche Bearbeitungsmaske aussieht.
+     * gewöhnliche Bearbeitungsmaske aussieht. Eingabefelder stehen wie bei
+     * den Contao-Widgets in einem eigenen Block unter der Überschrift; direkt
+     * hinter dem <h3> klebt das Dateifeld sonst an der Beschriftung.
      *
      * @param Request $request Die laufende Anfrage, für die Adressen
      *
@@ -241,7 +243,7 @@ class ImportModul
   <fieldset class="tl_tbox nolegend">
     <div class="widget w50">
       <h3><label for="schachquiz_datei">'.$t('datei').'</label></h3>
-      <input type="file" name="datei" id="schachquiz_datei" accept=".csv,.json,.txt" class="tl_upload_field">
+      <div><input type="file" name="datei" id="schachquiz_datei" accept=".csv,.json,.txt" class="tl_upload_field"></div>
       <p class="tl_help tl_tip">'.$t('dateiHilfe').'</p>
     </div>
     <div class="widget w50">

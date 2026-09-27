@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['schachquiz']['besteSerie'] = 'Beste Serie';
 $GLOBALS['TL_LANG']['schachquiz']['keineEintraege'] = 'Noch niemand hat genug Fragen beantwortet.';
 $GLOBALS['TL_LANG']['schachquiz']['vorlaeufigHinweis'] = '? = vorläufige Wertung, noch zu wenige Antworten für eine sichere Einschätzung.';
 $GLOBALS['TL_LANG']['schachquiz']['mindestensHinweis'] = 'Aufgenommen ab %d beantworteten Fragen.';
+$GLOBALS['TL_LANG']['schachquiz']['nochNichtGewertet'] = '(noch %d Antworten bis zur Wertung)';
 
 // Meldungen der Schnittstelle; der Server schickt dazu den Code nach „meldung_“.
 $GLOBALS['TL_LANG']['schachquiz']['meldung_anmelden'] = 'Bitte melde dich an, um am Quiz teilzunehmen.';

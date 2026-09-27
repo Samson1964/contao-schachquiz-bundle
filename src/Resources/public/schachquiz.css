@@ -9,8 +9,8 @@
  */
 
 .schachquiz {
-    --sq-hell: #f0d9b5;
-    --sq-dunkel: #b58863;
+    --sq-hell: #dee3e6;
+    --sq-dunkel: #8ca2ad;
     --sq-rand: #d9d4cc;
     --sq-flaeche: #fff;
     --sq-text: inherit;
@@ -84,10 +84,6 @@
     .schachquiz__tisch:has(.schachquiz__brett:not([hidden])) {
         grid-template-columns: minmax(16rem, 24rem) minmax(0, 1fr);
     }
-
-    .schachquiz__tisch:has(.schachquiz__brett:not([hidden])) .schachquiz__figuren {
-        grid-column: 1 / -1;
-    }
 }
 
 .schachquiz__brett {
@@ -122,22 +118,10 @@
 .schachquiz__feld--dunkel { background: var(--sq-dunkel); }
 
 .schachquiz__stein {
-    font-size: 10cqw;
-    font-family: "Segoe UI Symbol", "DejaVu Sans", "Noto Sans Symbols2", "Arial Unicode MS", serif;
+    width: 100%;
+    height: 100%;
     user-select: none;
-}
-
-.schachquiz__stein--schwarz {
-    color: #1b1b1b;
-    text-shadow: 0 0 1px rgba(255, 255, 255, .6);
-}
-
-/* Weiße Figuren: das gefüllte Zeichen weiß mit dunklem Umriss. */
-.schachquiz__stein--weiss {
-    color: #fff;
-    text-shadow:
-        -1px -1px 0 #222, 1px -1px 0 #222,
-        -1px 1px 0 #222, 1px 1px 0 #222;
+    pointer-events: none;
 }
 
 .schachquiz__koord {
@@ -358,6 +342,8 @@
 
 /* --- Die Figurenrunde -------------------------------------------------- */
 
+/* Steht über der Frage; die untere Linie ist der Boden, auf dem die Figuren
+   stehen, und trennt die Runde zugleich von der Fragekarte. */
 .schachquiz__figuren {
     position: relative;
     display: flex;
@@ -366,6 +352,7 @@
     gap: .9rem;
     height: 4.2rem;
     padding-top: 1.2rem;
+    margin-bottom: .9rem;
     border-bottom: 2px solid var(--sq-rand);
     color: var(--sq-figur);
     user-select: none;
@@ -590,8 +577,20 @@
     font-weight: 600;
 }
 
-.schachquiz-rangliste tfoot td {
+.schachquiz-rangliste tfoot tr:first-child td {
     border-top: 2px solid #e3e0da;
+}
+
+/* Leerzeile zwischen den gezeigten Plätzen und dem eigenen, weiter hinten liegenden Platz. */
+.schachquiz-rangliste__luecke td {
+    height: 1.4em;
+    border-bottom: 0;
+}
+
+.schachquiz-rangliste__fehlen {
+    font-weight: 400;
+    font-size: .85em;
+    color: #6b6b6b;
 }
 
 .schachquiz-rangliste__hinweis {

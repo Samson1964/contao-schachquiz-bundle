@@ -9,6 +9,7 @@ $konfiguration = [
     'frage' => $this->adresseFrage,
     'antwort' => $this->adresseAntwort,
     'animationen' => $this->animationen,
+    'figuren' => $this->figuren,
     'texte' => $this->texte,
 ];
 ?>
@@ -30,6 +31,18 @@ $konfiguration = [
     <div class="schachquiz__brett" hidden></div>
 
     <div class="schachquiz__karte">
+      <?php if ($this->animationen): ?>
+        <?php // Die Figurenrunde über der Frage: denkt mit, jubelt, trauert. Rein dekorativ. ?>
+        <div class="schachquiz__figuren" aria-hidden="true">
+          <span class="schachquiz__figur schachquiz__figur--koenig">&#9818;&#65038;<i class="schachquiz__blase">…</i><i class="schachquiz__traene"></i></span>
+          <span class="schachquiz__figur schachquiz__figur--dame">&#9819;&#65038;</span>
+          <span class="schachquiz__figur schachquiz__figur--springer">&#9822;&#65038;</span>
+          <span class="schachquiz__figur schachquiz__figur--bauer">&#9823;&#65038;</span>
+          <span class="schachquiz__funken"><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i></span>
+          <span class="schachquiz__differenz"></span>
+        </div>
+      <?php endif; ?>
+
       <p class="schachquiz__meta"></p>
       <div class="schachquiz__frage" aria-live="polite"><?= $this->texte['laden'] ?? '' ?></div>
       <p class="schachquiz__hinweis"></p>
@@ -46,17 +59,6 @@ $konfiguration = [
       </div>
     </div>
 
-    <?php if ($this->animationen): ?>
-      <?php // Die Figurenrunde: denkt mit, jubelt, trauert. Rein dekorativ. ?>
-      <div class="schachquiz__figuren" aria-hidden="true">
-        <span class="schachquiz__figur schachquiz__figur--koenig">&#9818;&#65038;<i class="schachquiz__blase">…</i><i class="schachquiz__traene"></i></span>
-        <span class="schachquiz__figur schachquiz__figur--dame">&#9819;&#65038;</span>
-        <span class="schachquiz__figur schachquiz__figur--springer">&#9822;&#65038;</span>
-        <span class="schachquiz__figur schachquiz__figur--bauer">&#9823;&#65038;</span>
-        <span class="schachquiz__funken"><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i><i>&#10022;</i></span>
-        <span class="schachquiz__differenz"></span>
-      </div>
-    <?php endif; ?>
   </div>
 
   <p class="schachquiz__gasthinweis" hidden><?= $this->texte['gast'] ?? '' ?></p>

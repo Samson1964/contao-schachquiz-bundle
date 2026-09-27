@@ -16,6 +16,7 @@ $GLOBALS['TL_LANG']['tl_schachquiz']['beschreibung'] = ['Description', 'Optional
 $GLOBALS['TL_LANG']['tl_schachquiz']['published'] = ['Published', 'Only questions of published topics appear in the quiz.'];
 
 $GLOBALS['TL_LANG']['tl_schachquiz']['new'] = ['New topic', 'Create a new quiz topic'];
+$GLOBALS['TL_LANG']['tl_schachquiz']['wertungen'] = ['Quiz ratings', 'View and reset the Glicko-2 ratings of members'];
 $GLOBALS['TL_LANG']['tl_schachquiz']['import'] = ['Import questions', 'Import questions from a CSV or JSON file'];
 $GLOBALS['TL_LANG']['tl_schachquiz']['edit'] = ['Edit questions', 'Edit the questions of topic ID %s'];
 $GLOBALS['TL_LANG']['tl_schachquiz']['editheader'] = ['Edit topic', 'Edit the settings of topic ID %s'];

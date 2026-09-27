@@ -10,12 +10,6 @@
 (function () {
     'use strict';
 
-    // Figurenzeichen der schwarzen Garnitur, für beide Farben verwendet: Die
-    // Farbe kommt aus dem Stylesheet. U+FE0E erzwingt die Textdarstellung,
-    // sonst zeigen manche Mobilgeräte den Bauern als bunten Emoji.
-    var FIGUREN = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
-    var TEXT = '︎';
-
     /**
      * Zeichnet ein Brett aus einer FEN in den Behälter.
      *
@@ -27,8 +21,11 @@
      * @param {string}      fen       Vollständige, serverseitig geprüfte FEN
      * @param {string}      ansicht   „auto“, „weiss“ oder „schwarz“
      * @param {object}      texte     Beschriftungen (weissAmZug, schwarzAmZug)
+     * @param {string}      figuren   Adresse der SVG-Datei mit den Figuren; jede
+     *                                Figur ist dort eine Gruppe mit der ID aus Farbe
+     *                                und Buchstabe, etwa „wk“ oder „bn“
      */
-    function zeichneBrett(behaelter, fen, ansicht, texte) {
+    function zeichneBrett(behaelter, fen, ansicht, texte, figuren) {
         var teile = fen.split(/\s+/);
         var schwarz = teile[1] === 'b';
         var gedreht = ansicht === 'schwarz' || (ansicht !== 'weiss' && schwarz);
@@ -63,10 +60,7 @@
                 feld.className = 'schachquiz__feld ' + ((reihe + linie) % 2 ? 'schachquiz__feld--dunkel' : 'schachquiz__feld--hell');
 
                 if (figur) {
-                    var stein = document.createElement('span');
-                    stein.className = 'schachquiz__stein ' + (figur === figur.toUpperCase() ? 'schachquiz__stein--weiss' : 'schachquiz__stein--schwarz');
-                    stein.textContent = FIGUREN[figur.toLowerCase()] + TEXT;
-                    feld.appendChild(stein);
+                    feld.appendChild(stein(figuren, (figur === figur.toUpperCase() ? 'w' : 'b') + figur.toLowerCase()));
                 }
 
                 // Koordinaten am linken und unteren Rand.
@@ -87,6 +81,30 @@
 
         behaelter.replaceChildren(brett, zug);
         behaelter.hidden = false;
+    }
+
+    /**
+     * Erzeugt eine Figur als Verweis in die SVG-Datei.
+     *
+     * Mit <use> lädt der Browser die Datei nur einmal, egal wie viele Figuren
+     * auf dem Brett stehen, und die Figuren bleiben in jeder Größe scharf.
+     *
+     * @param {string} figuren Adresse der SVG-Datei
+     * @param {string} id      Figur, etwa „wk“ für den weißen König
+     * @returns {SVGElement}
+     */
+    function stein(figuren, id) {
+        var ns = 'http://www.w3.org/2000/svg';
+        var svg = document.createElementNS(ns, 'svg');
+        var use = document.createElementNS(ns, 'use');
+
+        svg.setAttribute('viewBox', '0 0 40 40');
+        svg.setAttribute('class', 'schachquiz__stein');
+        svg.setAttribute('aria-hidden', 'true');
+        use.setAttribute('href', figuren + '#' + id);
+        svg.appendChild(use);
+
+        return svg;
     }
 
     /**
@@ -299,7 +317,7 @@
         this.el.abgeben.disabled = true;
 
         if (frage.fen) {
-            zeichneBrett(this.el.brett, frage.fen, frage.brett, this.texte);
+            zeichneBrett(this.el.brett, frage.fen, frage.brett, this.texte, this.konfig.figuren);
         } else {
             this.el.brett.hidden = true;
             this.el.brett.replaceChildren();

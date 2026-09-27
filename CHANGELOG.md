@@ -1,5 +1,19 @@
 # Schachquiz-Bundle Changelog
 
+## Version 1.1.0 (2026-09-27)
+
+* Change: Das Diagramm zeigt die Figuren als Vektorgrafiken (Satz „Cburnett", CC BY-SA 3.0)
+  statt als Unicode-Zeichen, auf einem blaugrauen Brett. Die Feldfarben bleiben über
+  `--sq-hell` und `--sq-dunkel` anpassbar.
+* Change: Die Figurenrunde steht jetzt über der Frage statt unter den Antworten.
+* Change: „Quiz-Wertungen" ist kein eigenes Backend-Modul mehr, sondern eine globale
+  Operation in der Themenliste des Moduls Schachquiz.
+* Change: Die Rangliste zeigt dem angemeldeten Mitglied seinen Platz immer: nach einer
+  Leerzeile unter der Liste, und vor Erreichen der Mindestzahl ohne Rang, aber mit der
+  Zahl der noch fehlenden Antworten.
+* Fix: Die eigene Zeile unter der Rangliste war intern nicht als eigene markiert.
+* Fix: Im Importformular stand das Dateifeld ohne Abstand direkt unter der Beschriftung.
+
 ## Version 1.0.1 (2026-09-27)
 
 * Fix: Der Import übersprang Stellungsaufgaben mit gleichem Fragetext als vermeintliche

@@ -66,6 +66,10 @@ class SchachquizController extends AbstractFrontendModuleController
         $template->themen = $this->themen(array_values(array_map('intval', StringUtil::deserialize($model->schachquiz_themen, true))));
         $template->gaesteErlaubt = (bool) $model->schachquiz_gaeste;
         $template->animationen = !$model->schachquiz_ohneAnimation;
+
+        // Absolute Adresse, weil das Skript sie in <use href> einsetzt und eine
+        // relative Angabe dort nicht verlässlich über <base> aufgelöst wird.
+        $template->figuren = $request->getBasePath().'/bundles/contaoschachquiz/figuren/cburnett.svg';
         $template->texte = $this->texte();
 
         $GLOBALS['TL_CSS']['schachquiz'] = 'bundles/contaoschachquiz/schachquiz.css|static';
