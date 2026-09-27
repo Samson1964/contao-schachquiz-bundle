@@ -25,9 +25,11 @@ use Schachbulle\ContaoSchachquizBundle\Wertung\Schwierigkeit;
  *   angelegt. Fragen ohne Themenangabe landen in einem neuen Thema „Import"
  *   mit Datum.
  *
- * Eine Frage, deren Text im Zielthema bereits vorkommt, wird übersprungen.
- * Damit lässt sich dieselbe Datei gefahrlos zweimal einspielen, etwa nach
- * einer Korrektur einzelner Zeilen.
+ * Eine Frage, deren Text und Stellung im Zielthema bereits vorkommen, wird
+ * übersprungen. Damit lässt sich dieselbe Datei gefahrlos zweimal einspielen,
+ * etwa nach einer Korrektur einzelner Zeilen. Die Stellung gehört zum
+ * Vergleich, weil Stellungsaufgaben meist denselben Text tragen („Weiß am
+ * Zug. Welcher Zug setzt matt?“) und sich nur im Diagramm unterscheiden.
  */
 class FragenSpeicher
 {
@@ -69,7 +71,7 @@ class FragenSpeicher
                 $pid = $zielThema > 0 ? $zielThema : $this->themaFuer($thema['titel'], $thema['beschreibung'], $zaehler);
 
                 foreach ($thema['fragen'] as $frage) {
-                    if ($this->gibtEs($pid, $frage['frage'])) {
+                    if ($this->gibtEs($pid, $frage['frage'], $frage['fen'])) {
                         ++$zaehler['uebersprungen'];
 
                         continue;
@@ -165,15 +167,16 @@ class FragenSpeicher
     }
 
     /**
-     * Prüft, ob eine Frage mit diesem Text im Thema schon existiert.
+     * Prüft, ob eine Frage mit diesem Text und dieser Stellung im Thema schon existiert.
      *
-     * @param int    $pid   ID des Themas
-     * @param string $text  Der Fragetext
+     * @param int    $pid  ID des Themas
+     * @param string $text Der Fragetext
+     * @param string $fen  Die vollständige Stellung, leer bei Fragen ohne Diagramm
      *
-     * @return bool true bei einem wortgleichen Treffer
+     * @return bool true bei einem Treffer mit gleichem Text und gleicher Stellung
      */
-    private function gibtEs(int $pid, string $text): bool
+    private function gibtEs(int $pid, string $text, string $fen): bool
     {
-        return false !== $this->db->fetchOne('SELECT id FROM tl_schachquiz_items WHERE pid = ? AND frage = ?', [$pid, $text]);
+        return false !== $this->db->fetchOne('SELECT id FROM tl_schachquiz_items WHERE pid = ? AND frage = ? AND fen = ?', [$pid, $text, $fen]);
     }
 }

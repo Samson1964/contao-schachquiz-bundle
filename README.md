@@ -79,8 +79,8 @@ leichter oder schwerer sind als gedacht.
 Backend → Schachquiz → „Fragen importieren". Als Ziel wird entweder ein
 vorhandenes Thema gewählt, oder die Themen werden aus der Datei übernommen
 (vorhandene gleichen Titels werden ergänzt). Fehlerhafte Zeilen erscheinen mit
-Zeilennummer, die übrigen werden trotzdem übernommen. Eine Frage, deren Text im
-Thema schon vorkommt, wird übersprungen. Dieselbe Datei lässt sich also gefahrlos
+Zeilennummer, die übrigen werden trotzdem übernommen. Eine Frage, deren Text und
+Stellung im Thema schon vorkommen, wird übersprungen. Dieselbe Datei lässt sich also gefahrlos
 erneut einspielen. Vorlagen stehen auf der Importseite zum Herunterladen bereit.
 
 ### CSV

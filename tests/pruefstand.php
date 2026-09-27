@@ -196,6 +196,17 @@ melde('40 Beispielfragen ins Prüfthema importiert', 40 === $zaehler['fragen'], 
 $zweiter = $speicher->speichere($ergebnis, $thema);
 melde('Zweiter Import überspringt alle 40', 0 === $zweiter['fragen'] && 40 === $zweiter['uebersprungen']);
 
+// Stellungsaufgaben tragen oft denselben Text; unterscheiden sie sich in der
+// Stellung, sind es verschiedene Fragen.
+$gleicherText = (new FragenLeser())->leseJson(json_encode([
+    ['frage' => 'Prüfstand: gleicher Text?', 'fen' => '6k1/5ppp/8/8/8/8/5PPP/4R1K1 w - - 0 1', 'antworten' => ['Te8#', 'h3'], 'richtig' => [1]],
+    ['frage' => 'Prüfstand: gleicher Text?', 'fen' => '7k/6pp/8/8/8/8/5PPP/3QR1K1 w - - 0 1', 'antworten' => ['Dd8#', 'h3'], 'richtig' => [1]],
+]));
+$gleich = $speicher->speichere($gleicherText, $thema);
+$nochmal = $speicher->speichere($gleicherText, $thema);
+melde('Gleicher Text, andere Stellung: beide übernommen, beim zweiten Mal übersprungen', 2 === $gleich['fragen'] && 2 === $nochmal['uebersprungen'], json_encode([$gleich, $nochmal]));
+$db->executeStatement("DELETE FROM tl_schachquiz_items WHERE pid = ? AND frage = 'Prüfstand: gleicher Text?'", [$thema]);
+
 $gespeichert = $db->fetchAssociative("SELECT * FROM tl_schachquiz_items WHERE pid = ? AND frage LIKE 'Welche dieser Spieler waren%'", [$thema]);
 melde('Mehrfachauswahl als serialisiertes Array gespeichert', ['1', '3', '5'] === StringUtil::deserialize($gespeichert['richtig'] ?? ''));
 melde('Anfangswertung nach Stufe 6', Schwierigkeit::wertung(6) === (float) $gespeichert['wertung']);

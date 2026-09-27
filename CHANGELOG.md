@@ -1,5 +1,11 @@
 # Schachquiz-Bundle Changelog
 
+## Version 1.0.1 (2026-09-27)
+
+* Fix: Der Import übersprang Stellungsaufgaben mit gleichem Fragetext als vermeintliche
+  Duplikate (etwa alle „Weiß am Zug. Welcher Zug setzt matt?“ nach der ersten). Als
+  vorhanden gilt eine Frage jetzt nur, wenn Text **und** Stellung übereinstimmen.
+
 ## Version 1.0.0 (2026-09-26)
 
 * Add: Backend-Modul „Schachquiz" mit Themen (`tl_schachquiz`) und Fragen
