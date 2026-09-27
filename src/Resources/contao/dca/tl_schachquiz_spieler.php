@@ -32,6 +32,7 @@ $GLOBALS['TL_DCA']['tl_schachquiz_spieler'] = [
                 'id' => 'primary',
                 'member' => 'unique',
                 'wertung' => 'index',
+                'beste_wertung' => 'index',
             ],
         ],
     ],
@@ -100,6 +101,20 @@ $GLOBALS['TL_DCA']['tl_schachquiz_spieler'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'letzte' => [
+            'sorting' => true,
+            'flag' => DataContainer::SORT_DAY_DESC,
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+        ],
+        // Höchste gefestigte Wertung für die ewige Bestenliste, 0 solange es keine gibt.
+        'beste_wertung' => [
+            'sorting' => true,
+            'flag' => DataContainer::SORT_DESC,
+            'sql' => "double NOT NULL default '0'",
+        ],
+        'beste_datum' => [
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+        ],
+        'erste_nutzung' => [
             'sorting' => true,
             'flag' => DataContainer::SORT_DAY_DESC,
             'sql' => "int(10) unsigned NOT NULL default '0'",

@@ -24,12 +24,15 @@ final class Teilnehmer
     /**
      * Legt einen Teilnehmer an.
      *
-     * @param int           $mitglied   ID aus tl_member, 0 für einen Gast
-     * @param Wertungsstand $stand      Aktuelle Wertung
-     * @param int           $anzahl     Bisher beantwortete Fragen
-     * @param int           $richtig    Davon richtig beantwortet
-     * @param int           $serie      Richtige Antworten in Folge bis jetzt
-     * @param int           $besteSerie Längste Folge richtiger Antworten
+     * @param int           $mitglied     ID aus tl_member, 0 für einen Gast
+     * @param Wertungsstand $stand        Aktuelle Wertung
+     * @param int           $anzahl       Bisher beantwortete Fragen
+     * @param int           $richtig      Davon richtig beantwortet
+     * @param int           $serie        Richtige Antworten in Folge bis jetzt
+     * @param int           $besteSerie   Längste Folge richtiger Antworten
+     * @param float         $besteWertung Höchste gefestigte Wertung, 0 solange es keine gibt
+     * @param int           $besteDatum   Zeitpunkt der höchsten Wertung (Unix-Zeit), 0 ohne
+     * @param int           $ersteNutzung Zeitpunkt der ersten Antwort (Unix-Zeit), 0 vor der ersten
      */
     public function __construct(
         public readonly int $mitglied,
@@ -38,6 +41,9 @@ final class Teilnehmer
         public int $richtig = 0,
         public int $serie = 0,
         public int $besteSerie = 0,
+        public float $besteWertung = 0.0,
+        public int $besteDatum = 0,
+        public int $ersteNutzung = 0,
     ) {
     }
 
@@ -54,13 +60,31 @@ final class Teilnehmer
     /**
      * Trägt das Ergebnis einer Antwort ein.
      *
+     * Führt nebenbei die erste Nutzung und die höchste Wertung nach. Als
+     * Höchstwert zählt nur eine gefestigte Wertung (nicht vorläufig): Ein
+     * Neuling springt mit großer Abweichung schnell um über hundert Punkte,
+     * und ein solcher Zufallsausschlag soll nicht für immer in der ewigen
+     * Bestenliste stehen.
+     *
      * @param Wertungsstand $neu     Der Wertungsstand nach der Antwort
      * @param bool          $richtig Ob die Antwort richtig war
+     * @param int           $zeit    Zeitpunkt der Antwort (Unix-Zeit); für Prüfungen
+     *                               einstellbar, sonst jetzt
      */
-    public function verbuche(Wertungsstand $neu, bool $richtig): void
+    public function verbuche(Wertungsstand $neu, bool $richtig, ?int $zeit = null): void
     {
+        $zeit ??= time();
         $this->stand = $neu;
         ++$this->anzahl;
+
+        if (0 === $this->ersteNutzung) {
+            $this->ersteNutzung = $zeit;
+        }
+
+        if (!$neu->istVorlaeufig() && $neu->wertung > $this->besteWertung) {
+            $this->besteWertung = $neu->wertung;
+            $this->besteDatum = $zeit;
+        }
 
         if ($richtig) {
             ++$this->richtig;

@@ -27,7 +27,8 @@ Danach die Datenbank aktualisieren (Contao Manager oder `contao:migrate`).
 2. **Modul „Schachquiz"** anlegen (Frontend-Modulgruppe Schachquiz) und in eine Seite einbinden.
    Einstellungen: welche Themen gelten (ohne Auswahl alle), ob Gäste mitspielen
    dürfen, ob die Figuren-Animationen laufen.
-3. Optional das **Modul „Schachquiz-Rangliste"** anlegen: Anzahl der Plätze,
+3. Optional das **Modul „Schachquiz-Rangliste"** anlegen: Art der Rangliste (siehe
+   unten), Anzahl der Plätze,
    Mindestzahl an Antworten, Namensformat (Standard: „Anna S."). Ein angemeldetes
    Mitglied sieht seinen eigenen Platz immer, auch wenn er weiter hinten liegt
    (nach einer Leerzeile unter der Liste) oder es die Mindestzahl noch nicht
@@ -64,6 +65,43 @@ leichter oder schwerer sind als gedacht.
   Antworten der Mitglieder, wie schwer die Frage wirklich ist.
 * **Gäste** spielen mit einer Wertung, die nur für ihre Sitzung gilt. Sie verändern
   die Wertung der Fragen nicht und erscheinen nicht in der Rangliste.
+
+## Ranglisten
+
+Das Ranglistenmodul zeigt wahlweise:
+
+| Art | Inhalt |
+| --- | --- |
+| Aktuelle Wertung | Die heutige Wertung aller Mitglieder. |
+| Ewige Bestenliste | Die höchste je erreichte Wertung jedes Mitglieds, mit dem Tag, an dem sie erreicht wurde. Es zählt nur eine gefestigte Wertung (ohne „?"), damit ein zufälliger Ausschlag in den ersten Antworten nicht für immer oben steht. |
+| Monatsstände | Die am Monatsersten gesicherte Rangliste. Besucher wählen den Monat aus einer Liste; vorgegeben ist der neueste. |
+
+Zu jedem Mitglied speichert das Bundle außerdem die erste Nutzung und die höchste
+Wertung mit Datum (im Backend unter „Quiz-Wertungen" zu sehen).
+
+### Monatsersten sichern (Cronjob)
+
+Die Sicherung läuft als Contao-Cronjob mit dem Intervall „monthly", also am Ersten
+des Monats um 0 Uhr. Damit er pünktlich läuft, sollte auf dem Server der Cron von
+Contao jede Minute angestoßen werden, etwa per Crontab:
+
+```
+* * * * * /pfad/zu/php /pfad/zu/contao/vendor/bin/contao-console contao:cron
+```
+
+Ohne Crontab stößt Contao seine Cronjobs bei Seitenaufrufen an, sofern das nicht
+unter System → Einstellungen abgeschaltet ist. Dann läuft die Sicherung beim ersten
+Besuch nach Mitternacht. Eine verpasste Sicherung wird bis zum 7. des Monats nachgeholt,
+später nicht mehr, damit kein falscher Stand als Monatsersten erscheint. Jeder Monat
+wird nur einmal gesichert.
+
+Von Hand, etwa zum Testen:
+
+```bash
+vendor/bin/contao-console schachquiz:rangliste-sichern
+```
+
+Die gesicherten Stände stehen im Backend unter Schachquiz → „Monatsranglisten".
 
 ## Fragenauswahl
 
@@ -156,7 +194,8 @@ bloße Liste von Fragen wird ebenfalls verstanden.
   Prüfung des `Origin`. Contaos REQUEST_TOKEN passt hier nicht: Contao entfernt es
   aus Seiten ohne Cookie, und die erste Quizanfrage startet gerade erst die Sitzung.
 * Tabellen: `tl_schachquiz`, `tl_schachquiz_items`, `tl_schachquiz_spieler`
-  (eine Zeile je Mitglied), `tl_schachquiz_verlauf` (jede gestellte Frage).
+  (eine Zeile je Mitglied), `tl_schachquiz_verlauf` (jede gestellte Frage),
+  `tl_schachquiz_rangliste` (Monatsstände, mit den Namen zum Stichtag).
 
 ## Prüfstand
 

@@ -23,4 +23,9 @@ $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['show'] = ['Details', 'Show the det
 $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['loeschen_bestaetigen'] = 'Really delete the rating and answer history of this member? They will start again at 1500.';
 
 $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftung'] = 'rating %d%s · %d answers · %s correct · best streak %d';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftungBeste'] = 'highest %d on %s';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftungSeit'] = 'playing since %s';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beste_wertung'] = ['Highest rating', 'Highest established rating (without question mark).'];
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beste_datum'] = ['Reached on', ''];
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['erste_nutzung'] = ['First use', ''];
 $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['geloescht'] = 'Member %d (deleted)';

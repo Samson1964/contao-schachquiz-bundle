@@ -39,6 +39,13 @@ $GLOBALS['TL_LANG']['schachquiz']['besteSerieHinweis'] = 'Längste Folge = die m
 $GLOBALS['TL_LANG']['schachquiz']['keineEintraege'] = 'Noch niemand hat genug Fragen beantwortet.';
 $GLOBALS['TL_LANG']['schachquiz']['vorlaeufigHinweis'] = '? = vorläufige Wertung, noch zu wenige Antworten für eine sichere Einschätzung.';
 $GLOBALS['TL_LANG']['schachquiz']['mindestensHinweis'] = 'Aufgenommen ab %d beantworteten Fragen.';
+$GLOBALS['TL_LANG']['schachquiz']['hoechsteWertung'] = 'Höchste Wertung';
+$GLOBALS['TL_LANG']['schachquiz']['erreichtAm'] = 'erreicht am';
+$GLOBALS['TL_LANG']['schachquiz']['nochKeinBestwert'] = '(noch keine gefestigte Wertung)';
+$GLOBALS['TL_LANG']['schachquiz']['ewigHinweis'] = 'Gezählt wird die höchste gefestigte Wertung, also ohne Fragezeichen.';
+$GLOBALS['TL_LANG']['schachquiz']['stand'] = 'Stand';
+$GLOBALS['TL_LANG']['schachquiz']['zeigen'] = 'Zeigen';
+$GLOBALS['TL_LANG']['schachquiz']['keineMonate'] = 'Es wurde noch kein Monatsstand gesichert. Der erste entsteht am nächsten Monatsersten.';
 $GLOBALS['TL_LANG']['schachquiz']['nochNichtGewertet'] = '(noch %d Antworten bis zur Wertung)';
 
 // Meldungen der Schnittstelle; der Server schickt dazu den Code nach „meldung_“.

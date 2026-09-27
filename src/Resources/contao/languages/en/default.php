@@ -37,6 +37,13 @@ $GLOBALS['TL_LANG']['schachquiz']['besteSerieHinweis'] = 'Longest streak = most 
 $GLOBALS['TL_LANG']['schachquiz']['keineEintraege'] = 'Nobody has answered enough questions yet.';
 $GLOBALS['TL_LANG']['schachquiz']['vorlaeufigHinweis'] = '? = provisional rating, too few answers for a reliable estimate.';
 $GLOBALS['TL_LANG']['schachquiz']['mindestensHinweis'] = 'Listed from %d answered questions.';
+$GLOBALS['TL_LANG']['schachquiz']['hoechsteWertung'] = 'Highest rating';
+$GLOBALS['TL_LANG']['schachquiz']['erreichtAm'] = 'reached on';
+$GLOBALS['TL_LANG']['schachquiz']['nochKeinBestwert'] = '(no established rating yet)';
+$GLOBALS['TL_LANG']['schachquiz']['ewigHinweis'] = 'Counts the highest established rating, i.e. without a question mark.';
+$GLOBALS['TL_LANG']['schachquiz']['stand'] = 'Standing';
+$GLOBALS['TL_LANG']['schachquiz']['zeigen'] = 'Show';
+$GLOBALS['TL_LANG']['schachquiz']['keineMonate'] = 'No monthly standing has been saved yet. The first one is created on the next first of the month.';
 $GLOBALS['TL_LANG']['schachquiz']['nochNichtGewertet'] = '(%d more answers until ranked)';
 
 $GLOBALS['TL_LANG']['schachquiz']['meldung_anmelden'] = 'Please log in to take part in the quiz.';

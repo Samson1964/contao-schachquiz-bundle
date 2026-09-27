@@ -30,7 +30,9 @@ use Schachbulle\ContaoSchachquizBundle\Backend\ImportModul;
 use Schachbulle\ContaoSchachquizBundle\Controller\QuizController;
 use Schachbulle\ContaoSchachquizBundle\Import\FragenLeser;
 use Schachbulle\ContaoSchachquizBundle\Import\FragenSpeicher;
+use Schachbulle\ContaoSchachquizBundle\Migration\SpielerHistorieMigration;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Fragenauswahl;
+use Schachbulle\ContaoSchachquizBundle\Quiz\Monatsrangliste;
 use Schachbulle\ContaoSchachquizBundle\Quiz\QuizDienst;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Quizeinstellung;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste;
@@ -156,7 +158,7 @@ melde('Frontend-Texte vorhanden', !empty($GLOBALS['TL_LANG']['schachquiz']['rich
 $db = $container->get('database_connection');
 $schema = $db->createSchemaManager();
 
-foreach (['tl_schachquiz', 'tl_schachquiz_items', 'tl_schachquiz_spieler', 'tl_schachquiz_verlauf'] as $tabelle) {
+foreach (['tl_schachquiz', 'tl_schachquiz_items', 'tl_schachquiz_spieler', 'tl_schachquiz_verlauf', 'tl_schachquiz_rangliste'] as $tabelle) {
     melde("Tabelle $tabelle angelegt", $schema->tablesExist([$tabelle]));
 }
 
@@ -354,6 +356,56 @@ $spaet = (int) $db->lastInsertId();
 $gastFrage = $quiz->frage($einstellung, 0, $wechselSitzung, 0)['frage']['id'];
 $nachLogin = $quiz->antwort($einstellung, $spaet, $wechselSitzung, $loesung($gastFrage));
 melde('Als Gast gezogen, als Mitglied beantwortet: Verlauf vorhanden', 'ok' === $nachLogin['status'] && 1 === (int) $db->fetchOne('SELECT COUNT(*) FROM tl_schachquiz_verlauf WHERE member = ? AND item = ?', [$spaet, $gastFrage]));
+
+// --- Höchstwert, erste Nutzung, ewige Bestenliste ---------------------------
+
+$spielerZeile = $db->fetchAssociative('SELECT * FROM tl_schachquiz_spieler WHERE member = ?', [$mitglied]);
+melde('Erste Nutzung beim ersten Antworten gesetzt', (int) $spielerZeile['erste_nutzung'] > 0);
+melde('Vorläufige Wertung zählt nicht als Höchstwert', 0.0 === (float) $spielerZeile['beste_wertung']);
+
+// Wertung künstlich festigen, dann eine weitere Frage richtig beantworten.
+$db->update('tl_schachquiz_spieler', ['rd' => 80], ['member' => $mitglied]);
+$db->delete('tl_schachquiz_verlauf', ['member' => $mitglied]);
+$festSitzung = sitzung();
+$festFrage = $quiz->frage($einstellung, $mitglied, $festSitzung, 0);
+$quiz->antwort($einstellung, $mitglied, $festSitzung, $loesung($festFrage['frage']['id']));
+$spielerZeile = $db->fetchAssociative('SELECT * FROM tl_schachquiz_spieler WHERE member = ?', [$mitglied]);
+melde('Gefestigte Wertung wird Höchstwert mit Datum', (float) $spielerZeile['beste_wertung'] > 0 && abs((float) $spielerZeile['beste_wertung'] - (float) $spielerZeile['wertung']) < 0.001 && (int) $spielerZeile['beste_datum'] > 0);
+
+$rangliste = new Rangliste($db);
+$ewig = array_column($rangliste->plaetze(1000, 0, 'kurz', Rangliste::EWIG), null, 'member');
+melde('Ewige Bestenliste führt das Mitglied mit Höchstwert und Datum', isset($ewig[$mitglied]) && $ewig[$mitglied]['wertung'] === (int) round((float) $spielerZeile['beste_wertung']) && $ewig[$mitglied]['datum'] > 0);
+melde('Ewige Bestenliste: Mitglied ohne gefestigte Wertung fehlt', !isset($ewig[$spaet]));
+$ohne = $rangliste->eigenerPlatz($spaet, 0, 'kurz', Rangliste::EWIG);
+melde('Ewige Bestenliste: eigener Platz ohne Bestwert ohne Rang', is_array($ohne) && null === $ohne['platz'] && true === $ohne['ohneBestwert']);
+
+// --- Monatsrangliste --------------------------------------------------------
+
+$monatsrangliste = new Monatsrangliste($db);
+$db->executeStatement("DELETE FROM tl_schachquiz_rangliste WHERE monat LIKE '2099-%'");
+$gesichert = $monatsrangliste->sichere(new DateTimeImmutable('2099-01-01 00:05'));
+melde('Monatsersten gesichert', is_int($gesichert) && $gesichert >= 2, (string) $gesichert);
+melde('Zweite Sicherung im selben Monat unterbleibt', null === $monatsrangliste->sichere(new DateTimeImmutable('2099-01-03 10:00')));
+melde('Nach dem 7. keine Sicherung ohne Zwang', null === $monatsrangliste->sichere(new DateTimeImmutable('2099-02-15 10:00')));
+melde('Mit Zwang auch später im Monat', is_int($monatsrangliste->sichere(new DateTimeImmutable('2099-02-15 10:00'), true)));
+melde('Gesicherte Monate, neuester zuerst', array_slice(array_column($monatsrangliste->monate(), 'monat'), 0, 2) === ['2099-02', '2099-01']);
+$monatsplaetze = array_column($rangliste->plaetze(1000, 0, 'kurz', Rangliste::MONAT, '2099-01'), null, 'member');
+melde('Monatsstand enthält das Mitglied mit gesichertem Namen', 'Paula P.' === ($monatsplaetze[$mitglied]['name'] ?? null));
+$db->update('tl_member', ['firstname' => 'Paulina'], ['id' => $mitglied]);
+$monatsplaetze = array_column($rangliste->plaetze(1000, 0, 'kurz', Rangliste::MONAT, '2099-01'), null, 'member');
+melde('Umbenennung ändert den gesicherten Namen nicht', 'Paula P.' === ($monatsplaetze[$mitglied]['name'] ?? null));
+$eigenerMonat = $rangliste->eigenerPlatz($mitglied, 0, 'kurz', Rangliste::MONAT, '2099-01');
+melde('Eigener Platz im Monatsstand', is_array($eigenerMonat) && is_int($eigenerMonat['platz']));
+$db->executeStatement("DELETE FROM tl_schachquiz_rangliste WHERE monat LIKE '2099-%'");
+
+// --- Migration für ältere Spieler -------------------------------------------
+
+$db->update('tl_schachquiz_spieler', ['erste_nutzung' => 0, 'beste_wertung' => 0, 'beste_datum' => 0, 'rd' => 80], ['member' => $mitglied]);
+$migration = new SpielerHistorieMigration($db);
+melde('Migration erkennt Spieler ohne erste Nutzung', $migration->shouldRun());
+$migration->run();
+$spielerZeile = $db->fetchAssociative('SELECT * FROM tl_schachquiz_spieler WHERE member = ?', [$mitglied]);
+melde('Migration trägt erste Nutzung und Höchstwert nach', (int) $spielerZeile['erste_nutzung'] > 0 && (float) $spielerZeile['beste_wertung'] > 0);
 
 // --- Titel im Frontend -----------------------------------------------------
 

@@ -76,6 +76,9 @@ class TeilnehmerSpeicher
             (int) ($zeile['richtig'] ?? 0),
             (int) ($zeile['serie'] ?? 0),
             (int) ($zeile['beste_serie'] ?? 0),
+            (float) ($zeile['beste_wertung'] ?? 0),
+            (int) ($zeile['beste_datum'] ?? 0),
+            (int) ($zeile['erste_nutzung'] ?? 0),
         );
     }
 
@@ -96,6 +99,9 @@ class TeilnehmerSpeicher
             'richtig' => $teilnehmer->richtig,
             'serie' => $teilnehmer->serie,
             'beste_serie' => $teilnehmer->besteSerie,
+            'beste_wertung' => $teilnehmer->besteWertung,
+            'beste_datum' => $teilnehmer->besteDatum,
+            'erste_nutzung' => $teilnehmer->ersteNutzung,
         ];
 
         if ($teilnehmer->istGast()) {

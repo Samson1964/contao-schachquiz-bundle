@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer;
 
+use Contao\Config;
 use Contao\DataContainer;
+use Contao\Date;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste;
@@ -54,7 +56,53 @@ class SpielerListener
             $anzahl,
             $anzahl > 0 ? round(100 * (int) $zeile['richtig'] / $anzahl).' %' : '–',
             (int) $zeile['beste_serie']
+        ).$this->zusatz($zeile).']</span>';
+    }
+
+    /**
+     * Beschriftet einen gesicherten Monatsstand in der Backend-Liste.
+     *
+     * @param array<string, mixed> $zeile Zeile aus tl_schachquiz_rangliste
+     *
+     * @return string Monat, Name aus der Sicherung, Wertung und Antworten
+     */
+    public function monatsstand(array $zeile): string
+    {
+        $stand = Wertungsstand::ausZeile($zeile);
+        $anzahl = (int) $zeile['anzahl'];
+
+        return StringUtil::specialchars($zeile['monat'].' · '.Rangliste::name($zeile, 'voll')).' <span style="color:#999;padding-left:3px">['.Sprache::text(
+            'tl_schachquiz_spieler',
+            'beschriftung',
+            (int) round($stand->wertung),
+            $stand->istVorlaeufig() ? '?' : '',
+            $anzahl,
+            $anzahl > 0 ? round(100 * (int) $zeile['richtig'] / $anzahl).' %' : '–',
+            (int) $zeile['beste_serie']
         ).']</span>';
+    }
+
+    /**
+     * Hängt Höchstwertung und erste Nutzung an die Spielerbeschriftung an.
+     *
+     * @param array<string, mixed> $zeile Zeile aus tl_schachquiz_spieler
+     *
+     * @return string Leer, wenn beides fehlt; sonst „ · höchste … · seit …"
+     */
+    private function zusatz(array $zeile): string
+    {
+        $format = Config::get('dateFormat');
+        $zusatz = '';
+
+        if ((float) ($zeile['beste_wertung'] ?? 0) > 0) {
+            $zusatz .= ' · '.Sprache::text('tl_schachquiz_spieler', 'beschriftungBeste', (int) round((float) $zeile['beste_wertung']), Date::parse($format, (int) $zeile['beste_datum']));
+        }
+
+        if ((int) ($zeile['erste_nutzung'] ?? 0) > 0) {
+            $zusatz .= ' · '.Sprache::text('tl_schachquiz_spieler', 'beschriftungSeit', Date::parse($format, (int) $zeile['erste_nutzung']));
+        }
+
+        return $zusatz;
     }
 
     /**

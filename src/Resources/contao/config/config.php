@@ -14,14 +14,15 @@ use Schachbulle\ContaoSchachquizBundle\Backend\ImportModul;
  * Backend-Modul im Bereich „Inhalte" (BE_MOD-Gruppe content), hinter den
  * Modulen des Kerns und der übrigen Erweiterungen.
  *
- * Die Wertungen der Mitglieder (tl_schachquiz_spieler) sind kein eigenes
- * Modul, sondern eine globale Operation in der Themenliste; die Tabelle muss
+ * Die Wertungen der Mitglieder (tl_schachquiz_spieler) und die gesicherten
+ * Monatsstände (tl_schachquiz_rangliste) sind keine eigenen Module, sondern
+ * globale Operationen in der Themenliste; die Tabelle muss
  * dafür hier unter „tables" stehen, sonst verweigert Contao den Zugriff.
  *
  * Die Frontend-Module melden sich über den Dienst-Tag contao.frontend_module
  * in der services.yaml an und stehen deshalb nicht hier.
  */
 $GLOBALS['BE_MOD']['content']['schachquiz'] = [
-    'tables' => ['tl_schachquiz', 'tl_schachquiz_items', 'tl_schachquiz_spieler'],
+    'tables' => ['tl_schachquiz', 'tl_schachquiz_items', 'tl_schachquiz_spieler', 'tl_schachquiz_rangliste'],
     'import' => [ImportModul::class, 'zeige'],
 ];

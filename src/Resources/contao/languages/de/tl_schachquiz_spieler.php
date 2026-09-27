@@ -24,4 +24,9 @@ $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['loeschen_bestaetigen'] = 'Wertung 
 
 // Listenbeschriftung (EventListener\DataContainer\SpielerListener)
 $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftung'] = 'Wertung %d%s · %d Antworten · %s richtig · beste Serie %d';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftungBeste'] = 'höchste %d am %s';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beschriftungSeit'] = 'dabei seit %s';
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beste_wertung'] = ['Höchste Wertung', 'Höchste gefestigte Wertung (ohne Fragezeichen).'];
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['beste_datum'] = ['Erreicht am', ''];
+$GLOBALS['TL_LANG']['tl_schachquiz_spieler']['erste_nutzung'] = ['Erste Nutzung', ''];
 $GLOBALS['TL_LANG']['tl_schachquiz_spieler']['geloescht'] = 'Mitglied %d (gelöscht)';

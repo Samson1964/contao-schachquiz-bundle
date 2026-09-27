@@ -1,5 +1,18 @@
 # Schachquiz-Bundle Changelog
 
+## Version 1.3.0 (2026-09-27)
+
+* Add: Zu jedem Mitglied werden die erste Nutzung und die höchste gefestigte Wertung mit
+  Datum gespeichert. Eine Migration trägt beides bei bestehenden Spielern nach (erste
+  Nutzung aus dem Verlauf, Höchstwert aus der aktuellen Wertung, sofern gefestigt).
+* Add: Ranglistenmodul mit Auswahl der Art: aktuelle Wertung, ewige Bestenliste
+  (höchste Wertung mit Datum) oder Monatsstände mit Monatsauswahl für Besucher.
+* Add: Contao-Cronjob (monthly) sichert am Monatsersten die Rangliste in
+  `tl_schachquiz_rangliste`; verpasste Läufe werden bis zum 7. nachgeholt, jeder Monat nur
+  einmal. Konsolenbefehl `schachquiz:rangliste-sichern` für die Sicherung von Hand.
+* Add: Backend: globale Operation „Monatsranglisten"; die Spielerliste zeigt Höchstwert und
+  erste Nutzung.
+
 ## Version 1.2.0 (2026-09-27)
 
 * Add: Feld „Titel im Frontend" am Thema. Besucher sehen ihn statt des Titels; im Backend

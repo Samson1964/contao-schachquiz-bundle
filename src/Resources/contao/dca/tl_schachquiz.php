@@ -49,6 +49,11 @@ $GLOBALS['TL_DCA']['tl_schachquiz'] = [
                 'icon' => 'mgroup.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
+            'monatsranglisten' => [
+                'href' => 'table=tl_schachquiz_rangliste',
+                'icon' => 'tablewizard.svg',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
+            ],
             'import' => [
                 'href' => 'key=import',
                 'class' => 'header_new',

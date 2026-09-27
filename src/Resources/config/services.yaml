@@ -24,6 +24,22 @@ services:
 
     Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste: ~
 
+    Schachbulle\ContaoSchachquizBundle\Quiz\Monatsrangliste: ~
+
+    # --- Monatsrangliste, Migration, Konsole -------------------------------
+
+    # „monthly" wird in Contao 4.13 wie 5 zu „@monthly" (Erster, 0 Uhr).
+    Schachbulle\ContaoSchachquizBundle\Cron\MonatsranglisteCron:
+        arguments:
+            $logger: '@monolog.logger.contao.cron'
+        tags:
+            - { name: contao.cronjob, interval: monthly }
+
+    # Autokonfiguration setzt die Tags contao.migration bzw. console.command.
+    Schachbulle\ContaoSchachquizBundle\Migration\SpielerHistorieMigration: ~
+
+    Schachbulle\ContaoSchachquizBundle\Command\RanglisteSichernCommand: ~
+
     # --- Frontend ----------------------------------------------------------
 
     # Schnittstelle für das Quiz-Skript. Erbt nicht von AbstractController
@@ -71,6 +87,7 @@ services:
         tags:
             - { name: contao.callback, table: tl_schachquiz_spieler, target: list.label.label, method: beschriftung }
             - { name: contao.callback, table: tl_schachquiz_spieler, target: config.ondelete, method: loescheVerlauf }
+            - { name: contao.callback, table: tl_schachquiz_rangliste, target: list.label.label, method: monatsstand }
 
     Schachbulle\ContaoSchachquizBundle\EventListener\DataContainer\ModulListener:
         tags:

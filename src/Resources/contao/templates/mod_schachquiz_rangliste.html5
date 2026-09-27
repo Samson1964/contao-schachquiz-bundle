@@ -5,23 +5,52 @@
 <?php
 $t = $GLOBALS['TL_LANG']['schachquiz'] ?? [];
 $eigene = $this->eigene;
+$ewig = 'ewig' === $this->art;
+$spalten = $ewig ? 7 : 6;
+$datum = static fn (int $zeit): string => $zeit > 0 ? \Contao\Date::parse(\Contao\Config::get('dateFormat'), $zeit) : '–';
+
+// „Oktober 2026" aus „2026-10", mit den Monatsnamen von Contao.
+$monatsname = static function (string $monat): string {
+    [$jahr, $nummer] = array_map('intval', explode('-', $monat) + [1 => 1]);
+
+    return ($GLOBALS['TL_LANG']['MONTHS'][$nummer - 1] ?? $nummer).' '.$jahr;
+};
 
 // Zwischen der Liste und dem eigenen Platz steht eine Leerzeile, außer der
 // eigene Platz schließt unmittelbar an die gezeigten Plätze an.
 $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($this->zeilen) + 1);
 ?>
 
-<?php if (empty($this->zeilen)): ?>
+<?php if ('monat' === $this->art): ?>
+  <?php if (empty($this->monate)): ?>
+    <p class="schachquiz-rangliste__leer"><?= $t['keineMonate'] ?? '' ?></p>
+  <?php else: ?>
+    <form method="get" class="schachquiz-rangliste__monatswahl">
+      <label for="schachquiz-monat-<?= $this->id ?>"><?= $t['stand'] ?? 'Stand' ?></label>
+      <select name="monat" id="schachquiz-monat-<?= $this->id ?>" onchange="this.form.submit()">
+        <?php foreach ($this->monate as $eintrag): ?>
+          <option value="<?= $eintrag['monat'] ?>"<?= $eintrag['monat'] === $this->monat ? ' selected' : '' ?>>1. <?= $monatsname($eintrag['monat']) ?></option>
+        <?php endforeach; ?>
+      </select>
+      <noscript><button type="submit"><?= $t['zeigen'] ?? 'Zeigen' ?></button></noscript>
+    </form>
+  <?php endif; ?>
+<?php endif; ?>
+
+<?php if (empty($this->zeilen) && ('monat' !== $this->art || !empty($this->monate))): ?>
   <p class="schachquiz-rangliste__leer"><?= $t['keineEintraege'] ?? '' ?></p>
 <?php endif; ?>
 
 <?php if (!empty($this->zeilen) || $eigene): ?>
-  <table class="schachquiz-rangliste">
+  <table class="schachquiz-rangliste schachquiz-rangliste--<?= $this->art ?>">
     <thead>
       <tr>
         <th scope="col" class="schachquiz-rangliste__platz"><?= $t['platz'] ?? 'Platz' ?></th>
         <th scope="col" class="schachquiz-rangliste__name"><?= $t['name'] ?? 'Name' ?></th>
-        <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['wertung'] ?? 'Wertung' ?></th>
+        <th scope="col" class="schachquiz-rangliste__zahl"><?= $ewig ? ($t['hoechsteWertung'] ?? '') : ($t['wertung'] ?? 'Wertung') ?></th>
+        <?php if ($ewig): ?>
+          <th scope="col" class="schachquiz-rangliste__datum"><?= $t['erreichtAm'] ?? '' ?></th>
+        <?php endif; ?>
         <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['beantwortet'] ?? '' ?></th>
         <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['quote'] ?? 'Quote' ?></th>
         <th scope="col" class="schachquiz-rangliste__zahl"><?= $t['besteSerie'] ?? '' ?></th>
@@ -33,6 +62,9 @@ $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($thi
           <td class="schachquiz-rangliste__platz"><?= $zeile['platz'] ?></td>
           <td class="schachquiz-rangliste__name"><?= htmlspecialchars($zeile['name']) ?></td>
           <td class="schachquiz-rangliste__zahl"><?= $zeile['wertung'] ?><?= $zeile['vorlaeufig'] ? '?' : '' ?></td>
+          <?php if ($ewig): ?>
+            <td class="schachquiz-rangliste__datum"><?= $datum($zeile['datum']) ?></td>
+          <?php endif; ?>
           <td class="schachquiz-rangliste__zahl"><?= $zeile['anzahl'] ?></td>
           <td class="schachquiz-rangliste__zahl"><?= $zeile['quote'] ?> %</td>
           <td class="schachquiz-rangliste__zahl"><?= $zeile['serie'] ?></td>
@@ -42,7 +74,7 @@ $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($thi
     <?php if ($eigene): ?>
       <tfoot>
         <?php if ($luecke): ?>
-          <tr class="schachquiz-rangliste__luecke" aria-hidden="true"><td colspan="6">&nbsp;</td></tr>
+          <tr class="schachquiz-rangliste__luecke" aria-hidden="true"><td colspan="<?= $spalten ?>">&nbsp;</td></tr>
         <?php endif; ?>
         <tr class="schachquiz-rangliste__eigene" aria-current="true">
           <td class="schachquiz-rangliste__platz"><?= $eigene['platz'] ?? '–' ?></td>
@@ -50,9 +82,14 @@ $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($thi
             <?= htmlspecialchars($eigene['name']) ?>
             <?php if ($eigene['fehlen'] > 0): ?>
               <span class="schachquiz-rangliste__fehlen"><?= sprintf($t['nochNichtGewertet'] ?? '', $eigene['fehlen']) ?></span>
+            <?php elseif ($eigene['ohneBestwert']): ?>
+              <span class="schachquiz-rangliste__fehlen"><?= $t['nochKeinBestwert'] ?? '' ?></span>
             <?php endif; ?>
           </td>
-          <td class="schachquiz-rangliste__zahl"><?= $eigene['wertung'] ?><?= $eigene['vorlaeufig'] ? '?' : '' ?></td>
+          <td class="schachquiz-rangliste__zahl"><?= $eigene['ohneBestwert'] ? '–' : $eigene['wertung'].($eigene['vorlaeufig'] ? '?' : '') ?></td>
+          <?php if ($ewig): ?>
+            <td class="schachquiz-rangliste__datum"><?= $datum($eigene['datum']) ?></td>
+          <?php endif; ?>
           <td class="schachquiz-rangliste__zahl"><?= $eigene['anzahl'] ?></td>
           <td class="schachquiz-rangliste__zahl"><?= $eigene['quote'] ?> %</td>
           <td class="schachquiz-rangliste__zahl"><?= $eigene['serie'] ?></td>
@@ -62,7 +99,11 @@ $luecke = $eigene && (null === $eigene['platz'] || $eigene['platz'] > count($thi
   </table>
 
   <p class="schachquiz-rangliste__hinweis">
-    <?= $t['vorlaeufigHinweis'] ?? '' ?>
+    <?php if ($ewig): ?>
+      <?= $t['ewigHinweis'] ?? '' ?>
+    <?php else: ?>
+      <?= $t['vorlaeufigHinweis'] ?? '' ?>
+    <?php endif; ?>
     <?= $t['besteSerieHinweis'] ?? '' ?>
     <?php if ($this->mindestens > 0): ?><?= sprintf($t['mindestensHinweis'] ?? '', $this->mindestens) ?><?php endif; ?>
   </p>

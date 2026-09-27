@@ -14,6 +14,7 @@ use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController
 use Contao\FrontendUser;
 use Contao\ModuleModel;
 use Contao\Template;
+use Schachbulle\ContaoSchachquizBundle\Quiz\Monatsrangliste;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,11 +35,13 @@ class RanglisteController extends AbstractFrontendModuleController
     /**
      * Legt den Controller an.
      *
-     * @param Rangliste             $rangliste    Liest die Plätze aus der Datenbank
-     * @param TokenStorageInterface $tokenStorage Liefert das angemeldete Mitglied
+     * @param Rangliste             $rangliste       Liest die Plätze aus der Datenbank
+     * @param Monatsrangliste       $monatsrangliste Kennt die gesicherten Monate
+     * @param TokenStorageInterface $tokenStorage    Liefert das angemeldete Mitglied
      */
     public function __construct(
         private readonly Rangliste $rangliste,
+        private readonly Monatsrangliste $monatsrangliste,
         private readonly TokenStorageInterface $tokenStorage,
     ) {
     }
@@ -48,6 +51,10 @@ class RanglisteController extends AbstractFrontendModuleController
      *
      * Die Ausgabe hängt vom angemeldeten Mitglied ab (hervorgehobene Zeile)
      * und wird deshalb als privat gekennzeichnet.
+     *
+     * Bei der Art „Monatsstand" wählt der Besucher den Monat über den
+     * Parameter `monat` (JJJJ-MM); ohne oder mit unbekanntem Wert gilt der
+     * neueste gesicherte Monat.
      *
      * @param Template    $template Das Template mod_schachquiz_rangliste
      * @param ModuleModel $model    Der Datensatz des Moduls
@@ -64,7 +71,18 @@ class RanglisteController extends AbstractFrontendModuleController
         $mindestens = max(0, (int) $model->schachquiz_mindestzahl);
         $format = (string) ($model->schachquiz_namensformat ?: 'kurz');
 
-        $zeilen = $this->rangliste->plaetze($anzahl, $mindestens, $format);
+        $art = (string) ($model->schachquiz_ranglistenart ?: Rangliste::AKTUELL);
+        $monat = '';
+        $monate = [];
+
+        if (Rangliste::MONAT === $art) {
+            $monate = $this->monatsrangliste->monate();
+            $gewuenscht = (string) $request->query->get('monat', '');
+            $bekannt = array_column($monate, 'monat');
+            $monat = \in_array($gewuenscht, $bekannt, true) ? $gewuenscht : (string) ($bekannt[0] ?? '');
+        }
+
+        $zeilen = $this->rangliste->plaetze($anzahl, $mindestens, $format, $art, $monat);
         $eigene = null;
 
         if ($mitglied > 0) {
@@ -78,13 +96,16 @@ class RanglisteController extends AbstractFrontendModuleController
             unset($zeile);
 
             if (!$gefunden) {
-                $eigene = $this->rangliste->eigenerPlatz($mitglied, $mindestens, $format);
+                $eigene = $this->rangliste->eigenerPlatz($mitglied, $mindestens, $format, $art, $monat);
             }
         }
 
         $template->zeilen = $zeilen;
         $template->eigene = $eigene;
         $template->mindestens = $mindestens;
+        $template->art = $art;
+        $template->monate = $monate;
+        $template->monat = $monat;
 
         $GLOBALS['TL_CSS']['schachquiz'] = 'bundles/contaoschachquiz/schachquiz.css|static';
 

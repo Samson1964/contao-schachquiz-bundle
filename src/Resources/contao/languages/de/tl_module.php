@@ -13,6 +13,8 @@ $GLOBALS['TL_LANG']['tl_module']['schachquiz_legend'] = 'Schachquiz';
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_themen'] = ['Themen', 'Themen, aus denen Fragen kommen. Ohne Auswahl gelten alle veröffentlichten Themen.'];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_gaeste'] = ['Gäste zulassen', 'Besucher ohne Anmeldung spielen mit einer Wertung, die nur für ihre Sitzung gilt und nicht in die Rangliste eingeht.'];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_ohneAnimation'] = ['Figuren-Animationen abschalten', 'Keine Schachfiguren, die mitdenken, jubeln oder trauern. Besucher mit „Bewegung reduzieren" im Betriebssystem sehen sie ohnehin nicht.'];
+$GLOBALS['TL_LANG']['tl_module']['schachquiz_ranglistenart'] = ['Art der Rangliste', 'Aktuelle Wertung, ewige Bestenliste (höchste je erreichte Wertung) oder ein am Monatsersten gesicherter Stand, den Besucher auswählen.'];
+$GLOBALS['TL_LANG']['tl_module']['schachquiz_ranglistenart_optionen'] = ['aktuell' => 'Aktuelle Wertung', 'ewig' => 'Ewige Bestenliste', 'monat' => 'Monatsstände'];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_anzahl'] = ['Anzahl Plätze', 'Wie viele Plätze die Rangliste zeigt.'];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_mindestzahl'] = ['Mindestzahl Antworten', 'Erst ab so vielen beantworteten Fragen erscheint ein Mitglied in der Rangliste.'];
 $GLOBALS['TL_LANG']['tl_module']['schachquiz_namensformat'] = ['Namensformat', 'Wie die Mitglieder in der öffentlichen Rangliste heißen.'];
