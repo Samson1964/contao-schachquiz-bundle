@@ -103,6 +103,25 @@ vendor/bin/contao-console schachquiz:rangliste-sichern
 
 Die gesicherten Stände stehen im Backend unter Schachquiz → „Monatsranglisten".
 
+## Statistik
+
+Unter **Inhalte → Schachquiz → Statistik** (Knopf oben in der Themenliste) zeigt das
+Backend, wie das Quiz genutzt wird — aufgebaut wie die Statistik des Schachaufgaben-Bundles:
+
+* Zeitraum **Tag**, **Monat** oder **Jahr**, mit „zurück", „vor" und „bis heute" zum Blättern.
+* Kennzahlen: Fragen gestellt, beantwortet, richtig und falsch, jeweils getrennt nach
+  Mitgliedern und Gästen; dazu die Trefferquote und die Zahl der Mitglieder, die im
+  Zeitraum zum ersten Mal gespielt haben.
+* Zwei Balkendiagramme (Stunden, Tage oder Monate): beantwortet vor gestellt, richtig vor
+  beantwortet.
+* Antworten je Thema, die 20 meistbeantworteten Fragen und die 20 aktivsten Mitglieder.
+
+Gezählt wird stündlich in `tl_schachquiz_statistik` (eine Zeile je Stunde, Art und
+Mitglied/Gast), damit die Tabelle auch bei viel Betrieb klein bleibt. „Gestellt" zählt jede
+neu gezogene Frage, nicht die Wiederholung einer offenen Frage nach dem Neuladen. Die
+Zählung beginnt mit Version 1.4.0. Die Tabellen der Themen, Fragen und Mitglieder stammen
+aus dem Antwortverlauf und reichen daher weiter zurück; Gäste erscheinen dort nicht.
+
 ## Fragenauswahl
 
 * Gezogen wird zufällig aus den acht Fragen, deren Wertung der des Spielers am
@@ -195,7 +214,8 @@ bloße Liste von Fragen wird ebenfalls verstanden.
   aus Seiten ohne Cookie, und die erste Quizanfrage startet gerade erst die Sitzung.
 * Tabellen: `tl_schachquiz`, `tl_schachquiz_items`, `tl_schachquiz_spieler`
   (eine Zeile je Mitglied), `tl_schachquiz_verlauf` (jede gestellte Frage),
-  `tl_schachquiz_rangliste` (Monatsstände, mit den Namen zum Stichtag).
+  `tl_schachquiz_rangliste` (Monatsstände, mit den Namen zum Stichtag),
+  `tl_schachquiz_statistik` (Zähler je Stunde).
 
 ## Prüfstand
 

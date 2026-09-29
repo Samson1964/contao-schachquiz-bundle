@@ -52,12 +52,14 @@ class QuizDienst
      * @param Fragenauswahl      $auswahl    Sucht die nächste passende Frage
      * @param TeilnehmerSpeicher $speicher   Lädt und speichert Mitglieder und Gäste
      * @param Glicko2            $glicko     Rechnet die neuen Wertungen
+     * @param Statistik          $statistik  Zählt gestellte Fragen und Antworten
      */
     public function __construct(
         private readonly Connection $db,
         private readonly Fragenauswahl $auswahl,
         private readonly TeilnehmerSpeicher $speicher,
         private readonly Glicko2 $glicko,
+        private readonly Statistik $statistik,
     ) {
     }
 
@@ -124,6 +126,7 @@ class QuizDienst
             }
 
             $verlauf = $this->merkeGesehen($teilnehmer, $sitzung, $zeile);
+            $this->statistik->zaehle(Statistik::GESTELLT, $teilnehmer->istGast());
             $this->setzeOffen($sitzung, $einstellung->modul, ['frage' => (int) $zeile['id'], 'thema' => $thema, 'verlauf' => $verlauf]);
         }
 
@@ -198,6 +201,7 @@ class QuizDienst
         [$neuSpieler, $neuFrage] = $this->glicko->partie($vorher, $frageStand, $richtig ? 1.0 : 0.0);
 
         $teilnehmer->verbuche($neuSpieler, $richtig);
+        $this->statistik->zaehle($richtig ? Statistik::RICHTIG : Statistik::FALSCH, $teilnehmer->istGast());
         $this->speicher->speichere($teilnehmer, $sitzung);
 
         $stand = $this->sitzungsstand($sitzung);

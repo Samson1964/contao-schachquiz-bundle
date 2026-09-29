@@ -36,6 +36,7 @@ use Schachbulle\ContaoSchachquizBundle\Quiz\Monatsrangliste;
 use Schachbulle\ContaoSchachquizBundle\Quiz\QuizDienst;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Quizeinstellung;
 use Schachbulle\ContaoSchachquizBundle\Quiz\Rangliste;
+use Schachbulle\ContaoSchachquizBundle\Quiz\Statistik;
 use Schachbulle\ContaoSchachquizBundle\Quiz\TeilnehmerSpeicher;
 use Schachbulle\ContaoSchachquizBundle\Wertung\Glicko2;
 use Schachbulle\ContaoSchachquizBundle\Wertung\Schwierigkeit;
@@ -218,10 +219,12 @@ melde('Anfangswertung nach Stufe 6', Schwierigkeit::wertung(6) === (float) $gesp
 
 // --- Quiz als Gast -------------------------------------------------------
 
+$statistikVorher = (new Statistik($db))->summen((int) date('Ymd'), (int) date('Ymd'));
+
 $glicko = new Glicko2();
 $auswahl = new Fragenauswahl($db);
 $teilnehmerSpeicher = new TeilnehmerSpeicher($db);
-$quiz = new QuizDienst($db, $auswahl, $teilnehmerSpeicher, $glicko);
+$quiz = new QuizDienst($db, $auswahl, $teilnehmerSpeicher, $glicko, new Statistik($db));
 $einstellung = new Quizeinstellung(990001, [$thema], true);
 
 /**
@@ -268,6 +271,30 @@ melde('Danach: „alle Fragen gehabt“ statt Wiederholung', 'leer' === $leer['s
 melde('Gastwertung nach 39 richtigen deutlich gestiegen', $leer['spieler']['wertung'] > 1800 && $leer['spieler']['gast'], (string) $leer['spieler']['wertung']);
 melde('Sitzungsstand: 40 Antworten, davon 39 richtig', 40 === ($leer['spieler']['sitzungAnzahl'] ?? null) && 39 === ($leer['spieler']['sitzungRichtig'] ?? null), json_encode([$leer['spieler']['sitzungAnzahl'] ?? null, $leer['spieler']['sitzungRichtig'] ?? null]));
 melde('Gäste verändern die Wertung der Fragen nicht', 0 === (int) $db->fetchOne('SELECT SUM(anzahl) FROM tl_schachquiz_items WHERE pid = ?', [$thema]));
+
+// --- Statistik ------------------------------------------------------------------
+
+$heute = (int) date('Ymd');
+$statistikDienst = new Statistik($db);
+$nachher = $statistikDienst->summen($heute, $heute);
+$differenz = static fn (string $art): int => $nachher[$art]['gaeste'] - $statistikVorher[$art]['gaeste'];
+melde('Statistik zählt 40 gestellte Fragen für Gäste', $differenz(Statistik::GESTELLT) >= 40, (string) $differenz(Statistik::GESTELLT));
+melde('Statistik zählt 39 richtige und 1 falsche Antwort', 39 === $differenz(Statistik::RICHTIG) && 1 === $differenz(Statistik::FALSCH), $differenz(Statistik::RICHTIG).'/'.$differenz(Statistik::FALSCH));
+melde('Beantwortet = richtig + falsch', $nachher['beantwortet']['gesamt'] === $nachher[Statistik::RICHTIG]['gesamt'] + $nachher[Statistik::FALSCH]['gesamt']);
+
+$statRequest = Request::create('http://localhost/contao?do=schachquiz&key=statistik&ebene=tag');
+$statRequest->attributes->set('_scope', 'backend');
+$statRequest->setSession(sitzung());
+$container->get('request_stack')->push($statRequest);
+
+try {
+    $statSeite = $container->get(Schachbulle\ContaoSchachquizBundle\Backend\StatistikSeite::class)->zeige();
+} catch (Throwable $e) {
+    $statSeite = 'AUSNAHME: '.$e->getMessage();
+}
+
+$container->get('request_stack')->pop();
+melde('Statistikseite rendert Kennzahlen und zwei Diagramme', str_contains($statSeite, 'sq-stat-kennzahl') && 2 === substr_count($statSeite, '<svg'), str_starts_with($statSeite, 'AUSNAHME') ? $statSeite : '');
 
 melde('Ohne Gastfreigabe keine Frage für Gäste', 'fehler' === $quiz->frage(new Quizeinstellung(990002, [$thema], false), 0, sitzung(), 0)['status']);
 

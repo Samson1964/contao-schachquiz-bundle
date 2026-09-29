@@ -1,0 +1,165 @@
+<?php
+/*
+ * Backend-Template der Statistik (do=schachquiz&key=statistik).
+ * Aufbau wie be_schachaufgaben_statistik aus dem Schachaufgaben-Bundle.
+ */
+$t = $this->texte;
+$zahl = static fn ($wert): string => number_format((int) $wert, 0, ',', '.');
+$e = static fn ($text): string => Contao\StringUtil::specialchars((string) $text);
+$s = $this->summen;
+?>
+<div id="tl_buttons">
+  <a href="<?= $this->urlModul ?>" class="header_back" title="" accesskey="b" onclick="Backend.getScrollOffset()"><?= $t['zurueckModul'] ?? 'Zurück' ?></a>
+</div>
+
+<h2 class="sub_headline"><?= $t['ueberschrift'] ?? '' ?></h2>
+
+<div class="tl_listing_container sq-stat">
+
+  <div class="sq-stat-steuerung">
+    <div class="sq-stat-gruppe">
+      <span class="sq-stat-titel"><?= $t['zeitraumTitel'] ?? '' ?></span>
+      <?php foreach ($this->ebenenLinks as $l): ?>
+        <a href="<?= $l['url'] ?>" class="sq-stat-knopf<?= $l['aktiv'] ? ' aktiv' : '' ?>"><?= $l['text'] ?></a>
+      <?php endforeach; ?>
+    </div>
+  </div>
+
+  <div class="sq-stat-navigation">
+    <a href="<?= $this->urlZurueck ?>" class="sq-stat-knopf">&#9664;&nbsp;<?= $t['zurueck'] ?? '' ?></a>
+    <span class="sq-stat-zeitraum"><strong><?= $this->zeitraum ?></strong></span>
+    <?php if ($this->kannVor): ?>
+      <a href="<?= $this->urlVor ?>" class="sq-stat-knopf"><?= $t['vor'] ?? '' ?>&nbsp;&#9654;</a>
+      <a href="<?= $this->urlHeute ?>" class="sq-stat-knopf"><?= $t['heute'] ?? '' ?></a>
+    <?php else: ?>
+      <span class="sq-stat-knopf gesperrt" aria-disabled="true"><?= $t['vor'] ?? '' ?>&nbsp;&#9654;</span>
+    <?php endif; ?>
+    <span class="sq-stat-hinweis"><?= sprintf($t['bestand'] ?? '%s %s', $zahl($this->bestand['fragen']), $zahl($this->bestand['spieler'])) ?></span>
+  </div>
+
+  <?php if (!$this->hatDaten): ?>
+
+    <p class="tl_info"><?= $t['keineDaten'] ?? '' ?></p>
+
+  <?php else: ?>
+
+    <div class="sq-stat-kennzahlen">
+      <?php foreach (['gestellt', 'beantwortet', 'richtig', 'falsch'] as $art): ?>
+        <div class="sq-stat-kennzahl">
+          <strong><?= $zahl($s[$art]['gesamt']) ?></strong>
+          <span><?= $t['art_'.$art] ?? $art ?></span>
+          <small><?= sprintf($t['davon'] ?? '%s / %s', $zahl($s[$art]['mitglieder']), $zahl($s[$art]['gaeste'])) ?></small>
+        </div>
+      <?php endforeach; ?>
+      <div class="sq-stat-kennzahl">
+        <strong><?= null === $this->quote ? '–' : $this->quote.' %' ?></strong>
+        <span><?= $t['quote'] ?? '' ?></span>
+        <small><?= sprintf($t['neueSpieler'] ?? '%s', $zahl($this->bestand['neueSpieler'])) ?></small>
+      </div>
+    </div>
+
+    <?php foreach (['diagrammGestellt' => 'legendeGestellt', 'diagrammRichtig' => 'legendeRichtig'] as $diagramm => $legende): ?>
+      <div class="sq-stat-diagramm">
+        <div class="sq-stat-legende">
+          <span class="sq-stat-farbe sq-stat-farbe--dunkel"></span><?= $t[$legende][0] ?? '' ?>
+          <span class="sq-stat-farbe sq-stat-farbe--hell"></span><?= $t[$legende][1] ?? '' ?>
+        </div>
+        <div class="sq-stat-scroll"><?= $this->$diagramm ?></div>
+      </div>
+    <?php endforeach; ?>
+
+    <h3 class="sq-stat-zwischentitel"><?= $t['themen'] ?? '' ?></h3>
+    <?php if (empty($this->themen)): ?>
+      <p class="tl_help"><?= $t['keineMitglieder'] ?? '' ?></p>
+    <?php else: ?>
+      <div class="sq-stat-scroll">
+        <table class="tl_listing sq-stat-tabelle">
+          <thead>
+            <tr>
+              <th><?= $t['thema'] ?? '' ?></th>
+              <th class="rechts"><?= $t['beantwortetSpalte'] ?? '' ?></th>
+              <th class="rechts"><?= $t['richtigSpalte'] ?? '' ?></th>
+              <th class="rechts"><?= $t['quote'] ?? '' ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($this->themen as $i => $z): ?>
+              <tr class="<?= $i % 2 ? 'even' : 'odd' ?>">
+                <td><?= $e($z['thema']) ?></td>
+                <td class="rechts"><strong><?= $zahl($z['beantwortet']) ?></strong></td>
+                <td class="rechts"><?= $zahl($z['richtig']) ?></td>
+                <td class="rechts"><?= $z['beantwortet'] > 0 ? round(100 * $z['richtig'] / $z['beantwortet']).' %' : '–' ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php endif; ?>
+
+    <h3 class="sq-stat-zwischentitel"><?= $t['meistbeantwortet'] ?? '' ?></h3>
+    <?php if (empty($this->meistbeantwortet)): ?>
+      <p class="tl_help"><?= $t['keineMitglieder'] ?? '' ?></p>
+    <?php else: ?>
+      <div class="sq-stat-scroll">
+        <table class="tl_listing sq-stat-tabelle">
+          <thead>
+            <tr>
+              <th class="rechts"><?= $t['platz'] ?? '' ?></th>
+              <th class="rechts"><?= $t['beantwortetSpalte'] ?? '' ?></th>
+              <th class="rechts"><?= $t['richtigSpalte'] ?? '' ?></th>
+              <th><?= $t['frage'] ?? '' ?></th>
+              <th><?= $t['thema'] ?? '' ?></th>
+              <th class="rechts"><?= $t['wertung'] ?? '' ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($this->meistbeantwortet as $i => $z): ?>
+              <tr class="<?= $i % 2 ? 'even' : 'odd' ?>">
+                <td class="rechts"><?= $i + 1 ?></td>
+                <td class="rechts"><strong><?= $zahl($z['beantwortet']) ?></strong></td>
+                <td class="rechts"><?= $zahl($z['richtig']) ?></td>
+                <td><?= $e(Contao\StringUtil::substr((string) $z['frage'], 80)) ?></td>
+                <td><?= $e($z['thema']) ?></td>
+                <td class="rechts"><?= (int) round((float) $z['wertung']) ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php endif; ?>
+
+    <h3 class="sq-stat-zwischentitel"><?= $t['aktivste'] ?? '' ?></h3>
+    <?php if (empty($this->aktivste)): ?>
+      <p class="tl_help"><?= $t['keineMitglieder'] ?? '' ?></p>
+    <?php else: ?>
+      <div class="sq-stat-scroll">
+        <table class="tl_listing sq-stat-tabelle">
+          <thead>
+            <tr>
+              <th class="rechts"><?= $t['platz'] ?? '' ?></th>
+              <th class="rechts"><?= $t['beantwortetSpalte'] ?? '' ?></th>
+              <th class="rechts"><?= $t['richtigSpalte'] ?? '' ?></th>
+              <th><?= $t['name'] ?? '' ?></th>
+              <th class="rechts"><?= $t['aktuelleWertung'] ?? '' ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($this->aktivste as $i => $z): ?>
+              <tr class="<?= $i % 2 ? 'even' : 'odd' ?>">
+                <td class="rechts"><?= $i + 1 ?></td>
+                <td class="rechts"><strong><?= $zahl($z['beantwortet']) ?></strong></td>
+                <td class="rechts"><?= $zahl($z['richtig']) ?></td>
+                <td><?= $e($z['name']) ?></td>
+                <td class="rechts"><?= $z['wertung'] ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php endif; ?>
+
+    <p class="tl_help"><?= $t['hinweis'] ?? '' ?></p>
+
+  <?php endif; ?>
+
+</div>

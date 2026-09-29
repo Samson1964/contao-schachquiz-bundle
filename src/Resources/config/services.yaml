@@ -26,6 +26,8 @@ services:
 
     Schachbulle\ContaoSchachquizBundle\Quiz\Monatsrangliste: ~
 
+    Schachbulle\ContaoSchachquizBundle\Quiz\Statistik: ~
+
     # --- Monatsrangliste, Migration, Konsole -------------------------------
 
     # „monthly" wird in Contao 4.13 wie 5 zu „@monthly" (Erster, 0 Uhr).
@@ -66,6 +68,9 @@ services:
     # Der key-Rückruf `import` im Backend-Modul holt die Klasse über
     # System::importStatic() — das findet nur öffentliche Dienste.
     Schachbulle\ContaoSchachquizBundle\Backend\ImportModul:
+        public: true
+
+    Schachbulle\ContaoSchachquizBundle\Backend\StatistikSeite:
         public: true
 
     # Der Tag hängt an `target` selbsttätig `_callback` an; die Schreibweise

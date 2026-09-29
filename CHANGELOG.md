@@ -1,5 +1,15 @@
 # Schachquiz-Bundle Changelog
 
+## Version 1.4.0 (2026-09-29)
+
+* Add: Statistik im Backend (Inhalte → Schachquiz → Statistik), aufgebaut wie die des
+  Schachaufgaben-Bundles: Zeitraum Tag, Monat oder Jahr zum Blättern; Kennzahlen für
+  gestellte, beantwortete, richtige und falsche Fragen nach Mitgliedern und Gästen;
+  Trefferquote und neue Mitglieder; zwei SVG-Balkendiagramme; Antworten je Thema,
+  meistbeantwortete Fragen und aktivste Mitglieder.
+* Add: Tabelle `tl_schachquiz_statistik` zählt stündlich gestellte Fragen sowie richtige und
+  falsche Antworten. Ein Fehler beim Zählen unterbricht das Quiz nicht.
+
 ## Version 1.3.0 (2026-09-27)
 
 * Add: Zu jedem Mitglied werden die erste Nutzung und die höchste gefestigte Wertung mit

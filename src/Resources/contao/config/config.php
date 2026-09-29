@@ -9,6 +9,7 @@ declare(strict_types=1);
  */
 
 use Schachbulle\ContaoSchachquizBundle\Backend\ImportModul;
+use Schachbulle\ContaoSchachquizBundle\Backend\StatistikSeite;
 
 /*
  * Backend-Modul im Bereich „Inhalte" (BE_MOD-Gruppe content), hinter den
@@ -25,4 +26,6 @@ use Schachbulle\ContaoSchachquizBundle\Backend\ImportModul;
 $GLOBALS['BE_MOD']['content']['schachquiz'] = [
     'tables' => ['tl_schachquiz', 'tl_schachquiz_items', 'tl_schachquiz_spieler', 'tl_schachquiz_rangliste'],
     'import' => [ImportModul::class, 'zeige'],
+    // Statistik der gestellten und beantworteten Fragen (do=schachquiz&key=statistik).
+    'statistik' => [StatistikSeite::class, 'zeige'],
 ];
